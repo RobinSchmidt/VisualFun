@@ -14,7 +14,7 @@ function rsCurve(f, a, b, n = 200)
 
 function rsLissajous(n, m, numLines, a, b)
 {
-	s = 3;  // scaler
+	s = 1;  // scaler
   rsCurve(t => [s*sin(n*t), s*cos(m*t)], a, b, numLines);
   rsCurve(t => [s*cos(m*t), s*sin(n*t)], a, b, numLines);
   //s = -3;
@@ -25,9 +25,9 @@ function rsLissajous(n, m, numLines, a, b)
 function rsAliassajous()
 {
 	// maybe factor out into rsSetupPlot:
-	translate(width/2, height/2);    // puts origin at the center of the canvas
-	let scaleFactor = width/10;      // number of pixels for a unit distance
-	scale(scaleFactor, -scaleFactor) // the minus for the y-axis let's the y-axis go upward
+	translate(width/2, height/2);             // puts origin at the center of the canvas
+	let scaleFactor = min(width,height)/3;    // number of pixels for a unit distance
+	scale(scaleFactor, -scaleFactor)          // the minus for the y-axis let's the y-axis go upward
 	rotate(PI / 4.0);
 
   // user parameters:
@@ -89,7 +89,7 @@ function rsAliassajous()
 
 function setup() 
 {
-	createCanvas(900, 900);
+	createCanvas(windowWidth, windowHeight);
 	// todo: figure out brwoser window size and use the available space
 }
 
