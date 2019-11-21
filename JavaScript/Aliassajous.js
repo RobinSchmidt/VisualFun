@@ -24,8 +24,11 @@ function rsLissajous(n, m, numLines, a, b)
 
 settings = 
 { 
-  Speed: 1/16,
-  ShowIntervalEnd: true
+  //Speed: 1/16,
+  Speed: 0,
+  OffsetCoarse: 0,
+  OffsetFine: 0,
+  ShowIntervalEnd: true  // for figuring out, where interesing things happen
 }
 
 function rsAliassajous()
@@ -52,25 +55,25 @@ function rsAliassajous()
 
 	background(0)  
 
-
+  var end = 2*PI*(tEnd + settings.OffsetCoarse + settings.OffsetFine);
 
 	strokeWeight(12/scaleFactor)
 	stroke(255, 75, 200, 30);
-	rsLissajous(n, m, numLines, 0, 2*PI*tEnd)
+	rsLissajous(n, m, numLines, 0, end)
 
   strokeWeight(6/scaleFactor)
 	stroke(200, 75, 255, 60);
-	rsLissajous(n, m, numLines, 0, 2*PI*tEnd)
+	rsLissajous(n, m, numLines, 0, end)
 
 	strokeWeight(1/scaleFactor)
 	stroke(255, 255, 255, 120);
-	rsLissajous(n, m, numLines, 0, 2*PI*tEnd)
+	rsLissajous(n, m, numLines, 0, end)
 
   // factor out the 3 calls into 1
 
 
   // this text is still at the wrong position, rotated 45° and shows too many digits
-  if(settings.showIntervalEnd)
+  if(settings.ShowIntervalEnd)
   {
     fill("white");                 // text should be filled - outlines are ugly
     textSize(0.05);                 // what unit is this?  
@@ -108,6 +111,9 @@ function rsAliassajous()
 // -add parameter for color (hue), select actual colors via hsl or hsv
 // -respond to certain key-hits with setting tEnd to certain values
 
+// Observations:
+// -when tEnd == numLines, it starts over again
+
 
 //--------------------------------------------------------------------------------------------------
 // implementation of p5.js callbacks:
@@ -118,7 +124,9 @@ function setup()
 	// todo: figure out brwoser window size and use the available space
 
   var gui = new dat.GUI();
-  gui.add(settings, "Speed", -2, 2, 0.0001);
+  gui.add(settings, "Speed",  -2, 2, 0.0001);
+  gui.add(settings, "OffsetCoarse", -100, 100, 1);
+  gui.add(settings, "OffsetFine", -1, 1, 0.0001);
 }
 
 function draw() 
@@ -134,4 +142,4 @@ function draw()
 
 // -maybe it's possible to make my own version of dat.gui that includes: 
 //  -parameter mappers for sliders
-//  -use shift and/or mouse-wheel for fine-tuning
+//  -use shift and/or mouse-wheel for fine-tuning, ctrl for reset (or the other way around
