@@ -23,6 +23,11 @@ function rsLissajous(n, m, numLines, a, b)
   rsCurve(t => [s*cos(-m*t), s*sin(-n*t)], a, b, numLines);
 }
 
+settings = 
+{ 
+  Speed: 1/16 
+}
+
 function rsAliassajous()
 {
 	// maybe factor out into rsSetupPlot:
@@ -32,8 +37,12 @@ function rsAliassajous()
 	rotate(PI / 4.0);
 
   // user parameters:
-  var period = 16; // period of repitition in seconds
-                   // maybe change to "initialSpeed"
+  //var period = 16; // period of repitition in seconds
+                   // maybe change to "initialSpeed" or use freq
+
+  //var freq = 1/16;
+  var freq = settings.Speed;
+
   var n = 2; 
   var m = 3;
   var numLines = 75;
@@ -59,11 +68,11 @@ function rsAliassajous()
 
 
   // compute time increment based on frame rate and desired periodicty:
-  dt =  1 / (period * frameRate());
+  dt =  freq / frameRate();
   if(!isFinite(dt)) // sanity check necessary - it seems, frameRate may sometimes return 0
   	dt = 0.01;
 
-  dt *= 1 / (1+tEnd/period); // slow down over time to counteract vertex acceleration
+  dt *= 1 / (1+tEnd*freq); // slow down over time to counteract vertex acceleration
   // seems like 1 / (1+tEnd/period) is a good choice
 
   // update counter with wrap around:
@@ -87,6 +96,7 @@ function rsAliassajous()
 // -try other waveshapes - maybe use tanh of sin - should give some sort of smooth stop-and-go
 // -show an optionla counter for taking notes, when interesting things happen
 // -maybe give the user a slider to manually adjust length
+// -add parameter for color (hue), select actual colors via hsl or hsv
 
 
 //--------------------------------------------------------------------------------------------------
@@ -96,9 +106,18 @@ function setup()
 {
 	createCanvas(windowWidth, windowHeight);
 	// todo: figure out brwoser window size and use the available space
+
+  var gui = new dat.GUI();
+  gui.add(settings, "Speed", -2, 2, 0.0001);
 }
 
 function draw() 
 {
 	rsAliassajous();
 }
+
+
+
+
+// for dat.gui:
+// https://www.youtube.com/watch?v=x2izqg3fmX4&feature=youtu.be&list=PLb0zKSynM2PBMF67Fo_18vshTDgGf4oyc
