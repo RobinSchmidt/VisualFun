@@ -15,17 +15,17 @@ function rsCurve(f, a, b, n = 200)
 
 function rsLissajous(n, m, numLines, a, b)
 {
-	s = 1;  // scaler
-  rsCurve(t => [s*sin(n*t), s*cos(m*t)], a, b, numLines);
-  rsCurve(t => [s*cos(m*t), s*sin(n*t)], a, b, numLines);
-  //s = -3;
+	s = -1;
+  rsCurve(t => [s*sin( n*t), s*cos( m*t)], a, b, numLines);
+  rsCurve(t => [s*cos( m*t), s*sin( n*t)], a, b, numLines);
   rsCurve(t => [s*sin(-n*t), s*cos(-m*t)], a, b, numLines);
   rsCurve(t => [s*cos(-m*t), s*sin(-n*t)], a, b, numLines);
 }
 
 settings = 
 { 
-  Speed: 1/16 
+  Speed: 1/16,
+  ShowIntervalEnd: true
 }
 
 function rsAliassajous()
@@ -33,7 +33,7 @@ function rsAliassajous()
 	// maybe factor out into rsSetupPlot:
 	translate(width/2, height/2);             // puts origin at the center of the canvas
 	let scaleFactor = min(width,height)/3;    // number of pixels for a unit distance
-	scale(scaleFactor, -scaleFactor)          // the minus for the y-axis let's the y-axis go upward
+	scale(scaleFactor, scaleFactor)           // the minus for the y-axis let's the y-axis go upward
 	rotate(PI / 4.0);
 
   // user parameters:
@@ -52,6 +52,8 @@ function rsAliassajous()
 
 	background(0)  
 
+
+
 	strokeWeight(12/scaleFactor)
 	stroke(255, 75, 200, 30);
 	rsLissajous(n, m, numLines, 0, 2*PI*tEnd)
@@ -65,6 +67,16 @@ function rsAliassajous()
 	rsLissajous(n, m, numLines, 0, 2*PI*tEnd)
 
   // factor out the 3 calls into 1
+
+
+  // this text is still at the wrong position, rotated 45° and shows too many digits
+  if(settings.showIntervalEnd)
+  {
+    fill("white");                 // text should be filled - outlines are ugly
+    textSize(0.05);                 // what unit is this?  
+    text(tEnd, 0, 0);
+    noFill();
+  }
 
 
   // compute time increment based on frame rate and desired periodicty:
@@ -81,10 +93,7 @@ function rsAliassajous()
 }
 
 // todo: 
-// -let the speed depend on time - the later, the slower - or maybe that's to simple - maybe some
-//  more interesting speed vs time function is required
-// -in general, the speed of the movement of the vertices grows ever faster over time - maybe some 
-//  sort factor dt *= 1 / (1+tEnd) would be appropriate
+// -optionally display the curve length tEnd
 // -to figure out an appropriate function, tweak the start-value of tEnd - try values 0, 50, 100
 //  and try to find a function that works well for all 3 values - maybe it should be something 
 //  like: dt = a / (b + c*tEnd + d*tEnd^2)...so maybe something like
@@ -97,6 +106,7 @@ function rsAliassajous()
 // -show an optionla counter for taking notes, when interesting things happen
 // -maybe give the user a slider to manually adjust length
 // -add parameter for color (hue), select actual colors via hsl or hsv
+// -respond to certain key-hits with setting tEnd to certain values
 
 
 //--------------------------------------------------------------------------------------------------
@@ -121,3 +131,7 @@ function draw()
 
 // for dat.gui:
 // https://www.youtube.com/watch?v=x2izqg3fmX4&feature=youtu.be&list=PLb0zKSynM2PBMF67Fo_18vshTDgGf4oyc
+
+// -maybe it's possible to make my own version of dat.gui that includes: 
+//  -parameter mappers for sliders
+//  -use shift and/or mouse-wheel for fine-tuning
