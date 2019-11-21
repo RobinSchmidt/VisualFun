@@ -17,9 +17,9 @@ function rsLissajous(n, m, numLines, a, b)
 {
 	s = -1;
   rsCurve(t => [s*sin( n*t), s*cos( m*t)], a, b, numLines);
-  //rsCurve(t => [s*cos( m*t), s*sin( n*t)], a, b, numLines);
-  //rsCurve(t => [s*sin(-n*t), s*cos(-m*t)], a, b, numLines);
-  //rsCurve(t => [s*cos(-m*t), s*sin(-n*t)], a, b, numLines);
+  rsCurve(t => [s*cos( m*t), s*sin( n*t)], a, b, numLines);
+  rsCurve(t => [s*sin(-n*t), s*cos(-m*t)], a, b, numLines);
+  rsCurve(t => [s*cos(-m*t), s*sin(-n*t)], a, b, numLines);
 }
 
 // User parameters - some of them can be controlled by the GUI:
@@ -89,7 +89,7 @@ function rsAliassajous()
 
   // update counter with wrap around:
   tEnd = tEnd + dt;
-  //tEnd %= 30;
+  //tEnd %= 30; // i think, we could do tEnd %= num Lines here - that should not change anything
 }
 
 // todo: 
@@ -108,8 +108,9 @@ function rsAliassajous()
 // -add parameter for color (hue), select actual colors via hsl or hsv
 // -respond to certain key-hits with setting tEnd to certain values
 
-// Observations:
-// -when tEnd == numLines, it starts over again
+// Observations for n=2, m=3:
+// -when tEnd == numLines, it starts over again - we only need to look at the range
+//  tEnd = 0...NumLines - outside that, all patterns repeat
 // -when numlines is "nicely" divisible by tEnd, we get interesting patterns
 // -i think, the pattern has the most symmetric appearance, when the gcd of NumLines and tEnd is 
 //  large
@@ -120,10 +121,11 @@ function rsAliassajous()
 //   NumLines
 // -when removing all but one of the rsCurve calls in rsLissajous, thereby removing the 
 //  artificially enforced symmetry, we get the following shapes:
-//  60/12, 60/48: pentagram, 60/15: centered line, 60/18, 60/42: zig-zag-polygon, 
+//  60/12, 60/48: pentagram, 60/15: centered line, 60/18,60/42,90/63: zig-zag-polygon, 
 //  60/20, 60/40: top-right line, 
-//  60/24, 60/36: pentagon
-//  nice unnamed shapes: 60/50, 60/54, 60/55, 60/56, 60/57
+//  60/24, 60/36, 90/54: pentagon
+//  nice unnamed shapes: 60/50, 60/54, 60/55, 60/56, 60/57, 90/75, 90/9, 90/10, 90/15
+//  75/60, 90/72, 90/18: pentagram
 
 // todo:
 // -use transitions between nice symmetric patters that are close to each other, like 
@@ -131,6 +133,8 @@ function rsAliassajous()
 // -let shapes rhythmically oscillate around a nice pattern
 //  -maybe it should be some sort of oscillation that gets damped over time and triggered by beats
 //   (or every 2nd or 4th beat)
+// -smaller number of lines look actually also quite nice - a bit like robot arms - maybe we should
+//  emphasize the "joints" by drawing circles at the line-ends
 
 //--------------------------------------------------------------------------------------------------
 // implementation of p5.js callbacks:
@@ -141,9 +145,9 @@ function setup()
 	// todo: figure out brwoser window size and use the available space
 
   var gui = new dat.GUI();
-  gui.add(settings, "NumLines",  10, 200, 1);
+  gui.add(settings, "NumLines",  1, 200, 1);
   gui.add(settings, "Speed",  -2, 2, 0.0001);
-  gui.add(settings, "OffsetCoarse", -100, 100, 1);
+  gui.add(settings, "OffsetCoarse", 0, 100, 1);
   gui.add(settings, "OffsetFine", -1, 1, 0.0001);
 }
 
