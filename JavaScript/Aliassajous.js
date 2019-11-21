@@ -13,13 +13,15 @@ function rsCurve(f, a, b, n = 200)
 	rsLines([...Array(n+1).keys()].map(k => f(a + (b-a) * k/n)));
 }
 
+
+
 function rsLissajous(n, m, numLines, a, b)
 {
 	s = -1;
-  rsCurve(t => [s*sin( n*t), s*cos( m*t)], a, b, numLines);
-  rsCurve(t => [s*cos( m*t), s*sin( n*t)], a, b, numLines);
-  rsCurve(t => [s*sin(-n*t), s*cos(-m*t)], a, b, numLines);
-  rsCurve(t => [s*cos(-m*t), s*sin(-n*t)], a, b, numLines);
+  rsCurve(t => [s*sin( n*t   ), s*sin( m*t+PI)], a, b, numLines);
+  rsCurve(t => [s*sin( m*t+PI), s*sin( n*t   )], a, b, numLines);
+  rsCurve(t => [s*sin(-n*t   ), s*sin(-m*t+PI)], a, b, numLines);
+  rsCurve(t => [s*sin(-m*t+PI), s*sin(-n*t   )], a, b, numLines);
 }
 
 // User parameters - some of them can be controlled by the GUI:
@@ -103,6 +105,7 @@ function rsAliassajous()
 // -mix in sinusoids of higher frequency 
 // -try something like spirograph images
 // -try other waveshapes - maybe use tanh of sin - should give some sort of smooth stop-and-go
+//  use a function rsSaturatedSine(x, drive)
 // -show an optionla counter for taking notes, when interesting things happen
 // -maybe give the user a slider to manually adjust length
 // -add parameter for color (hue), select actual colors via hsl or hsv
