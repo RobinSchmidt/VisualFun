@@ -1,5 +1,6 @@
 tEnd = 0; // a global variable for the endpoint of our curve
 // can be tweaked to "fast-forward" at 50, something interesting happens
+// rename to numCycles
 
 function rsLines(points)
 {
@@ -81,7 +82,11 @@ function rsAliassajous()
 //  dt = a / (b + c*sqrt(tEnd) + d*tEnd) would be more appropriate -> needs experimentation
 //  ...i think, asymptotically, it should behave like k/tEnd some k
 // -can we have the glow/decay behavior of the oscilloscope?
-// -mix in sinusoids of higher frequency
+// -mix in sinusoids of higher frequency 
+// -try something like spirograph images
+// -try other waveshapes - maybe use tanh of sin - should give some sort of smooth stop-and-go
+// -show an optionla counter for taking notes, when interesting things happen
+// -maybe give the user a slider to manually adjust length
 
 
 //--------------------------------------------------------------------------------------------------
