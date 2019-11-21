@@ -17,14 +17,15 @@ function rsLissajous(n, m, numLines, a, b)
 {
 	s = -1;
   rsCurve(t => [s*sin( n*t), s*cos( m*t)], a, b, numLines);
-  rsCurve(t => [s*cos( m*t), s*sin( n*t)], a, b, numLines);
-  rsCurve(t => [s*sin(-n*t), s*cos(-m*t)], a, b, numLines);
-  rsCurve(t => [s*cos(-m*t), s*sin(-n*t)], a, b, numLines);
+  //rsCurve(t => [s*cos( m*t), s*sin( n*t)], a, b, numLines);
+  //rsCurve(t => [s*sin(-n*t), s*cos(-m*t)], a, b, numLines);
+  //rsCurve(t => [s*cos(-m*t), s*sin(-n*t)], a, b, numLines);
 }
 
+// User parameters - some of them can be controlled by the GUI:
 settings = 
 { 
-  //Speed: 1/16,
+  NumLines: 75,
   Speed: 0,
   OffsetCoarse: 0,
   OffsetFine: 0,
@@ -40,15 +41,11 @@ function rsAliassajous()
 	rotate(PI / 4.0);
 
   // user parameters:
-  //var period = 16; // period of repitition in seconds
-                   // maybe change to "initialSpeed" or use freq
-
-  //var freq = 1/16;
-  var freq = settings.Speed;
-
+  var numLines = settings.NumLines;  
+  var freq     = settings.Speed;
   var n = 2; 
   var m = 3;
-  var numLines = 75;
+
   // todo: make them adjustable via dat.gui.js, see here:
   // https://www.youtube.com/watch?v=x2izqg3fmX4&list=PLb0zKSynM2PBMF67Fo_18vshTDgGf4oyc&index=5
 
@@ -77,7 +74,7 @@ function rsAliassajous()
   {
     fill("white");                 // text should be filled - outlines are ugly
     textSize(0.05);                 // what unit is this?  
-    text(tEnd, 0, 0);
+    text(end, 0, 0);
     noFill();
   }
 
@@ -85,7 +82,7 @@ function rsAliassajous()
   // compute time increment based on frame rate and desired periodicty:
   dt =  freq / frameRate();
   if(!isFinite(dt)) // sanity check necessary - it seems, frameRate may sometimes return 0
-  	dt = 0.01;
+  	dt = 0.01*freq;
 
   dt *= 1 / (1+tEnd*freq); // slow down over time to counteract vertex acceleration
   // seems like 1 / (1+tEnd/period) is a good choice
@@ -113,7 +110,27 @@ function rsAliassajous()
 
 // Observations:
 // -when tEnd == numLines, it starts over again
+// -when numlines is "nicely" divisible by tEnd, we get interesting patterns
+// -i think, the pattern has the most symmetric appearance, when the gcd of NumLines and tEnd is 
+//  large
+// -the shape of the pattern seems to depend on the quotient NumLines/tEnd
+//  60/30, 60/45, 60/15: cross, 60/20: roof, 60/24: pentagons
+//  other interesting shapes: 60/18, 60/12
+//  -this seems to suggest, that highly compostive numbers (such as 60) are a good choice for
+//   NumLines
+// -when removing all but one of the rsCurve calls in rsLissajous, thereby removing the 
+//  artificially enforced symmetry, we get the following shapes:
+//  60/12, 60/48: pentagram, 60/15: centered line, 60/18, 60/42: zig-zag-polygon, 
+//  60/20, 60/40: top-right line, 
+//  60/24, 60/36: pentagon
+//  nice unnamed shapes: 60/50, 60/54, 60/55, 60/56, 60/57
 
+// todo:
+// -use transitions between nice symmetric patters that are close to each other, like 
+//  60/54 and 60/55
+// -let shapes rhythmically oscillate around a nice pattern
+//  -maybe it should be some sort of oscillation that gets damped over time and triggered by beats
+//   (or every 2nd or 4th beat)
 
 //--------------------------------------------------------------------------------------------------
 // implementation of p5.js callbacks:
@@ -124,6 +141,7 @@ function setup()
 	// todo: figure out brwoser window size and use the available space
 
   var gui = new dat.GUI();
+  gui.add(settings, "NumLines",  10, 200, 1);
   gui.add(settings, "Speed",  -2, 2, 0.0001);
   gui.add(settings, "OffsetCoarse", -100, 100, 1);
   gui.add(settings, "OffsetFine", -1, 1, 0.0001);
