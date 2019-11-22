@@ -5,19 +5,30 @@ tEnd = 0; // a global variable for the endpoint of our curve
 // can be tweaked to "fast-forward" at 50, something interesting happens
 // rename to numCycles or curveLength
 
-//-------------------------------------------------------------------------------------------------
-// code that may be factored out into a library at some point - split the functions into those 
-// that require p5.js and those that don't (math-functions, waveforms, etc.)
+//=================================================================================================
+// code that may be factored out into a library at some point 
 
-/** Draws a bunch of lines from an array of points/vertices. Note that with transparency, this will
-look different from drawing the same array of vertices using 
-beginShape();vertex();vertex()...,;endShape(); even with noFill because at the joints of the lines, 
-pixels will be drawn twice. 
-@param {Array} p - An array of points/vertices */
-function rsLines(p)
+//-------------------------------------------------------------------------------------------------
+// Library functions that have no external dependencies:
+
+/** Returns a sinusoidal function with unit period, i.e. the period is 1 rather than 2*PI as it
+would be for the regular sine function. 
+@param {number} x - Argument, typically in the range 0..1 */
+function rsSin(x)
 {
-  for(var i = 0; i < p.length-1; i++)
-    line(p[i][0], p[i][1], p[i+1][0], p[i+1][1]);
+  return Math.sin(2*PI*x); 
+}
+
+/** Computes a unit-period sine wave that goes through a tanh waveshaper. The amplitude loss due to
+the waveshaping is compensated for such that the final wave has unit amplitude again.  
+@param {number} x - Argument, typically in the range 0..1
+@param {number} [d=0] - Drive - the higher, the more squarewave-like the output becomes. */
+function rsSaturatedSine(x, d=0)
+{
+  if(d == 0)
+    return rsSin(x);
+  else
+    return Math.tanh(d * rsSin(x)) / Math.tanh(d); // maybe use Math.tanh
 }
 
 /** Creates the array of vertices for a parametric curve (x,y) = f(t) in the interval t = a..b with
@@ -32,6 +43,21 @@ function rsCurveVertices(f, a, b, n)
 }
 // actually, i think f could also return a 3D point
 
+
+//-------------------------------------------------------------------------------------------------
+// Library functions that depend of p5.js:
+
+/** Draws a bunch of lines from an array of points/vertices. Note that with transparency, this will
+look different from drawing the same array of vertices using 
+beginShape();vertex();vertex()...,;endShape(); even with noFill because at the joints of the lines, 
+pixels will be drawn twice. 
+@param {Array} p - An array of points/vertices */
+function rsLines(p)
+{
+  for(var i = 0; i < p.length-1; i++)
+    line(p[i][0], p[i][1], p[i+1][0], p[i+1][1]);
+}
+
 /** Draws a parametric curve (x,y) = f(t) in the interval t = a..b with n sample points 
 @param {function}  f - The function that takes the parameter t and returns a 2D point.
 @param {number}    a - Start of the interval for t.
@@ -43,32 +69,27 @@ function rsCurveWithLines(f, a, b, n = 200)
 }
 // factor out a function that returns the vertex-array - maybe rsCurveVertices
 
-/** Returns a sinusoidal function with unit period, i.e. the period is 1 rather than 2*PI as it
-would be for the regular sine function. 
-@param {number} x - Argument, typically in the range 0..1 */
-function rsSin(x)
-{
-  return sin(2*PI*x); // maybe use Math.sin to make it independent from p5.js
-}
 
-/** Computes a unit-period sine wave that goes through a tanh waveshaper. The amplitude loss due to
-the waveshaping is compensated for such that the final wave has unit amplitude again.  
-@param {number} x - Argument, typically in the range 0..1
-@param {number} [d=0] - Drive - the higher, the more squarewave-like the output becomes. */
-function rsSaturatedSine(x, d=0)
-{
-  if(d == 0)
-    return rsSin(x);
-  else
-    return tanh(d * rsSin(x)) / tanh(d); // maybe use Math.tanh
-}
 
-//-------------------------------------------------------------------------------------------------
-// code specifically for this page (try to minimize this code, i.e. try to factor out stuff into
+//=================================================================================================
+// Code specifically for this page (try to minimize this code, i.e. try to factor out stuff into
 // "library" code)
 
-function rsLissajous(n, m, numLines, a, b, drive)
+// User parameters - some of them can be controlled by the GUI:
+settings = 
+{ 
+  NumLines: 75,
+  Speed: 0,
+  OffsetCoarse: 0,
+  OffsetFine: 0,
+  Drive: 0,
+  ShowIntervalEnd: true  // for figuring out, where interesing things happen
+}
+
+
+function rsLissajous(n, m, numLines, a, b)
 {
+  drive = settings.Drive;
   s = 1;
   p = 1/4;   // make parameter phaseDelta
   rsCurveWithLines(t => [s*rsSaturatedSine( n*t,   drive), s*rsSaturatedSine( m*t+p, drive)], a, b, numLines);
@@ -78,20 +99,13 @@ function rsLissajous(n, m, numLines, a, b, drive)
 
 
   // this should be done by a function rsSymmetrize(array, N)
-  rsCurveWithLines(t => [s*rsSaturatedSine(-n*t,   drive), s*rsSaturatedSine(-m*t+p, drive)], a, b, numLines);
-  rsCurveWithLines(t => [s*rsSaturatedSine(-m*t+p, drive), s*rsSaturatedSine(-n*t,   drive)], a, b, numLines);
+  //rsCurveWithLines(t => [s*rsSaturatedSine(-n*t,   drive), s*rsSaturatedSine(-m*t+p, drive)], a, b, numLines);
+  //rsCurveWithLines(t => [s*rsSaturatedSine(-m*t+p, drive), s*rsSaturatedSine(-n*t,   drive)], a, b, numLines);
   // re-factor to avoid the code duplication! make a function rsCurveSymmetrized(f, a, b, n)
 }
+// actually, we can get rid of many of the parameters because we may get them from the global settings object
 
-// User parameters - some of them can be controlled by the GUI:
-settings = 
-{ 
-  NumLines: 75,
-  Speed: 0,
-  OffsetCoarse: 0,
-  OffsetFine: 0,
-  ShowIntervalEnd: true  // for figuring out, where interesing things happen
-}
+
 
 function rsAliassajous()
 {
@@ -167,6 +181,7 @@ function setup()
   gui.add(settings, "Speed",        -2,   2, 0.0001);
   gui.add(settings, "OffsetCoarse",  0, 100, 1);
   gui.add(settings, "OffsetFine",   -1,   1, 0.0001);
+  gui.add(settings, "Drive",        -2,   2, 0.01);
 }
 
 function draw() 

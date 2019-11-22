@@ -52,6 +52,9 @@ Observations for n=2, m=3:
   nice unnamed shapes: 60/50, 60/54, 60/55, 60/56, 60/57, 90/75, 90/9, 90/10, 90/15
   75/60, 90/72, 90/18: pentagram
 
+-the drive actually doesn't do stop-and-go but deforms the shape - but that could be used for 
+ rhythmic modulation - on each beat, drive should be maximum maybe negatively maximum on 
+ off-beats - maybe modulate drive sinusoidally - should give a nice "pumping" effect
 
 
 
