@@ -13,7 +13,7 @@ pixels will be drawn twice.
 @param {Array} p - An array of points/vertices */
 function rsLines(p)
 {
-  for(var i = 0; i < points.length-1; i++)
+  for(var i = 0; i < p.length-1; i++)
     line(p[i][0], p[i][1], p[i+1][0], p[i+1][1]);
 }
 
@@ -26,6 +26,7 @@ function rsCurveWithLines(f, a, b, n = 200)
 {
   rsLines([...Array(n+1).keys()].map(k => f(a + (b-a) * k/n)));
 }
+// factor out a function that returns the vertex-array - maybe rsCurveVertices
 
 /** Returns a sinusoidal function with unit period, i.e. the period is 1 rather than 2*PI as it
 would be for the regular sine function. 
@@ -41,7 +42,7 @@ the waveshaping is compensated for such that the final wave has unit amplitude a
 @param {number} [d=0] - Drive - the higher, the more squarewave-like the output becomes. */
 function rsSaturatedSine(x, d=0)
 {
-  if(drive == 0)
+  if(d == 0)
     return rsSin(x);
   else
     return tanh(d * rsSin(x)) / tanh(d); // maybe use Math.tanh
@@ -53,12 +54,17 @@ function rsSaturatedSine(x, d=0)
 
 function rsLissajous(n, m, numLines, a, b, drive)
 {
-  s = -1;
-  p = PI/2;
+  s = 1;
+  p = 1/4;   // make parameter phaseDelta
   rsCurveWithLines(t => [s*rsSaturatedSine( n*t,   drive), s*rsSaturatedSine( m*t+p, drive)], a, b, numLines);
   rsCurveWithLines(t => [s*rsSaturatedSine( m*t+p, drive), s*rsSaturatedSine( n*t,   drive)], a, b, numLines);
-  rsCurveWithLines(t => [s*rsSaturatedSine(-n*t,   drive), s*rsSaturatedSine(-m*t+p, drive)], a, b, numLines);
-  rsCurveWithLines(t => [s*rsSaturatedSine(-m*t+p, drive), s*rsSaturatedSine(-n*t,   drive)], a, b, numLines);
+
+  //rsCurveWithLines(t => [-s*rsSaturatedSine( n*t, drive), s*rsSaturatedSine( m*t+p, drive)], a, b, numLines);
+
+
+  // this should be done by a function rsSymmetrize(array, N)
+  //rsCurveWithLines(t => [s*rsSaturatedSine(-n*t,   drive), s*rsSaturatedSine(-m*t+p, drive)], a, b, numLines);
+  //rsCurveWithLines(t => [s*rsSaturatedSine(-m*t+p, drive), s*rsSaturatedSine(-n*t,   drive)], a, b, numLines);
   // re-factor to avoid the code duplication! make a function rsCurveSymmetrized(f, a, b, n)
 }
 
@@ -76,22 +82,22 @@ function rsAliassajous()
 {
   // maybe factor out into rsSetupPlot:
   translate(width/2, height/2);             // puts origin at the center of the canvas
-  let scaleFactor = min(width,height)/3;    // number of pixels for a unit distance
+  let scaleFactor = min(width,height)/2;    // number of pixels for a unit distance
   scale(scaleFactor, scaleFactor)           // the minus for the y-axis let's the y-axis go upward
-  rotate(PI / 4.0);
+
+  //rotate(PI / 4.0); // maybe get rid of that - apply rotations internally in rsLissajous
 
   // user parameters:
   var numLines = settings.NumLines;  
   var freq     = settings.Speed;
-  var n = 2; 
-  var m = 3;
-
-
+  var n = 2;  // numLobesY
+  var m = 3;  // numLobesX
 
 
   background(0)  
 
-  var end = 2*PI*(tEnd + settings.OffsetCoarse + settings.OffsetFine);
+  //var end = 2*PI*(tEnd + settings.OffsetCoarse + settings.OffsetFine);
+  var end = tEnd + settings.OffsetCoarse + settings.OffsetFine;
 
   strokeWeight(12/scaleFactor)
   stroke(255, 75, 200, 30);
@@ -113,7 +119,7 @@ function rsAliassajous()
   {
     fill("white");                 // text should be filled - outlines are ugly
     textSize(0.05);                 // what unit is this?  
-    text(end, 0, 0);
+    text(end, -1, 0.99);
     noFill();
   }
 
@@ -140,7 +146,7 @@ function setup()
 
   // create and set up the GUI:
   var gui = new dat.GUI();
-  gui.add(settings, "NumLines",      1, 200, 1);
+  gui.add(settings, "NumLines",      1, 360, 1);
   gui.add(settings, "Speed",        -2,   2, 0.0001);
   gui.add(settings, "OffsetCoarse",  0, 100, 1);
   gui.add(settings, "OffsetFine",   -1,   1, 0.0001);

@@ -1,4 +1,9 @@
 todo: 
+-make a function rsSymmetrize(points, N) - takes an array of points and spits out an array of 
+ arrays of points, the first one is the original, the 2nd one has all points rotated by 2pi/N,
+ the next by 2*2pi/N, then 3*2pi/N etc until (N-1)*2pi/N
+-the up/dow symmetry is then realized by using that function - gets rid of 2 of the 4 rsCurve
+ calls ...the reflection-symmetry is still done by 2 calls (rotation can't replace reflection)
  -maybe let the file Aliassajous import p5.js and dat.gui.js, so the html file doesn't have to
   -> cleaner dependency handling (the script carries its dependencies with it rather than relying
   on outside html code doing the right thing)
