@@ -49,7 +49,7 @@ function rsCurveVertices(f, a, b, n)
 // be the same as the first and the curve will be closed
 
 //-------------------------------------------------------------------------------------------------
-// Library functions that depend of p5.js:
+// Library functions that depend on p5.js:
 
 /** Draws a bunch of lines from an array of points/vertices. Note that with transparency, this will
 look different from drawing the same array of vertices using 
@@ -90,6 +90,18 @@ settings =
   OffsetFine: 0,
   Drive: 0,
   ShowIntervalEnd: true  // for figuring out, where interesing things happen
+}
+
+function rsCreateAliassajousGui()
+{
+  var gui = new dat.GUI();
+  gui.add(settings, "NumLobesX",     1,   9, 1);
+  gui.add(settings, "NumLobesY",     1,   9, 1);  
+  gui.add(settings, "NumLines",      1, 360, 1);
+  gui.add(settings, "Speed",        -2,   2, 0.0001);
+  gui.add(settings, "OffsetCoarse",  0, 100, 1);
+  gui.add(settings, "OffsetFine",   -1,   1, 0.0001);
+  gui.add(settings, "Drive",         0,   2, 0.01);
 }
 
 
@@ -182,16 +194,7 @@ function rsAliassajous()
 function setup() 
 {
   createCanvas(windowWidth, windowHeight);
-
-  // create and set up the GUI:
-  var gui = new dat.GUI();
-  gui.add(settings, "NumLobesX",     1,   9, 1);
-  gui.add(settings, "NumLobesY",     1,   9, 1);  
-  gui.add(settings, "NumLines",      1, 360, 1);
-  gui.add(settings, "Speed",        -2,   2, 0.0001);
-  gui.add(settings, "OffsetCoarse",  0, 100, 1);
-  gui.add(settings, "OffsetFine",   -1,   1, 0.0001);
-  gui.add(settings, "Drive",         0,   2, 0.01);
+  rsCreateAliassajousGui();
 }
 
 function draw() 
