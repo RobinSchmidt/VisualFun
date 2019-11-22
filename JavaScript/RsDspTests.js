@@ -1,6 +1,7 @@
 // global variables:
-elapsedTime = 0;  // elapsed time (in seconds) since intialization
-timeDelta   = 0;
+rsFrameRate   = 0;
+rsElapsedTime = 0;  // elapsed time (in seconds) since intialization
+rsTimeDelta   = 0;
 
 
 
@@ -47,26 +48,28 @@ function ExpDecayFilter()
 function rsTestExpDecayFilter()
 {
   var period = 5;
-  var time   = elapsedTime % period;
+  var time   = rsElapsedTime % period;
 
   background(0);
 
 
-  // print out time info:
+  // print out time info (factor out int rsPrintTimeInfo):
   var xKey   = 10;
   var xValue = 90;
   var y      = 20;
   var dy     = 16;
   fill("white");
-
-  text("Elapsed Time:",        xKey,   y);
-  text(elapsedTime.toFixed(1), xValue, y);
+  text("Frame Rate:",            xKey,   y);
+  text(rsFrameRate.toFixed(1),   xValue, y);
   y += dy;
-  text("Time Delta:",        xKey,   y);
-  text(timeDelta.toFixed(3), xValue, y);
+  text("Time Delta:",            xKey,   y);
+  text(rsTimeDelta.toFixed(3),   xValue, y);
   y += dy;
-  text("Time Counter:",        xKey,   y);
-  text(time.toFixed(1),        xValue, y);
+  text("Elapsed Time:",          xKey,   y);
+  text(rsElapsedTime.toFixed(1), xValue, y);
+  y += dy;
+  text("Time Counter:",          xKey,   y);
+  text(time.toFixed(1),          xValue, y);
 }
 
 
@@ -83,12 +86,12 @@ function setup()
 function draw() 
 {
   // update global time variables
-  var fr = frameRate();
-  if(fr > 0)
-    timeDelta = 1/fr;
+  rsFrameRate = frameRate();
+  if(rsFrameRate > 0)
+    rsTimeDelta = 1/rsFrameRate;
   else
-    timeDelta = 0;
-  elapsedTime += timeDelta;  
+    rsTimeDelta = 0;
+  rsElapsedTime += rsTimeDelta;  
 
 
   rsTestExpDecayFilter();
