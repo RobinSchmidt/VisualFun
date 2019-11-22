@@ -82,6 +82,8 @@ function rsCurveWithLines(f, a, b, n = 200)
 // User parameters - some of them can be controlled by the GUI:
 settings = 
 { 
+  NumLobesX: 3,
+  NumLobesY: 2,
   NumLines: 75,
   Speed: 0,
   OffsetCoarse: 0,
@@ -125,9 +127,11 @@ function rsAliassajous()
   // user parameters:
   var numLines = settings.NumLines;  
   var freq     = settings.Speed;
-  var n = 2;  // numLobesY
-  var m = 3;  // numLobesX
+  var n        = settings.NumLobesY;
+  var m        = settings.NumLobesX;
 
+  // test - try to decouple overall speed from number of lobes:
+  freq /= sqrt(n*n + m*m);
 
   background(0)  
 
@@ -181,11 +185,13 @@ function setup()
 
   // create and set up the GUI:
   var gui = new dat.GUI();
+  gui.add(settings, "NumLobesX",     1,   9, 1);
+  gui.add(settings, "NumLobesY",     1,   9, 1);  
   gui.add(settings, "NumLines",      1, 360, 1);
   gui.add(settings, "Speed",        -2,   2, 0.0001);
   gui.add(settings, "OffsetCoarse",  0, 100, 1);
   gui.add(settings, "OffsetFine",   -1,   1, 0.0001);
-  gui.add(settings, "Drive",        -2,   2, 0.01);
+  gui.add(settings, "Drive",         0,   2, 0.01);
 }
 
 function draw() 
