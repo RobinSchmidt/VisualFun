@@ -24,7 +24,10 @@ ExpDecayFilter = function(timeConstant)
 
   this.getSample = function(x, dt) // x: input value, dt: time-delta between this and previous sample
   {
-    var b = 0.125;  
+    var b = 0.25;  
+    //var a = 1;  // more suitable for visual work - DC gain depends on tau, but maximum size does not
+                  // hmmm... is this true? maybe have a function getImpulseScaleFactor or something
+
     var a = 1-b;
     // prelimiary - todo: compute coeffs from timeConstant (factor out computation function)
 
@@ -50,13 +53,17 @@ ExpDecayFilter = function(timeConstant)
 // Test and experimentation functions:
 
 rsTimeCounter = 0;
-flt = new ExpDecayFilter(1.0); // time-constant tau is 1.0 seconds (time constant not yet functional)
+flt = new ExpDecayFilter(1.0); // time-constant tau is 2.0 seconds (time constant not yet functional)
 
 // maybe put to top
 
 function rsTestExpDecayFilter()
 {
-  var period = 3;
+  var bpm = 140;
+
+  //var period = 0.5;
+  var period = 60 / bpm;
+
   var time   = rsElapsedTime % period;
 
   background(0);
@@ -74,13 +81,6 @@ function rsTestExpDecayFilter()
 
   // filter the impulse:
   var filteredImpulse = flt.getSample(impulse, rsTimeDelta);
-
-
-
-  // todo: draw a circle with radius proportional to filteredImpulse
-
-
-
 
 
 
@@ -113,7 +113,31 @@ function rsTestExpDecayFilter()
   y += dy;
   text("Impulse:",                 xKey,   y);
   text(filteredImpulse.toFixed(4), xValue, y);
+
+
+  // draw a circle with radius proportional to filteredImpulse
+  var s = filteredImpulse;
+  fill(100*s, 50*s, 255*s); // brightness also depends on impulse
+  translate(width/2, height/2);           // puts origin at the center of the canvas
+  // maybe get rid of global transformations - draw directly in screen coordinates
+  var scaleFactor = min(width,height);
+  var diameter = 0.5;
+  circle(0, 0, diameter * scaleFactor * filteredImpulse);
+
+  // -use minSize + filteredImpulse * (maxSize - minSize)
+  // -smooth the attack
+  // -maybe make "a" unity in the filter, such that the circle does not get smaller when using 
+  //  slower decay
+  // -somehow, the size doesn't always be the same - oh - it seems, the filter must first warm up
+  //  and build up some signal
+  // -introduce user parameters to tweak, how much the impulse should affect size and brightness
+  //  ...or maybe use a different filter for size and brightness (with different attack/decay 
+  //  settings)
+  // -maybe make not every beat equally important - i.e. use smaller impulses for the offbeats
+  //  and maybe a larger impulse for the 1st of 4
 }
+// the goal is to get a nice pumping effect that can be used to modulate parameters with the beat 
+// of the music - such as size, brightness, color, line-thickness, rotation, shear
 
 
 

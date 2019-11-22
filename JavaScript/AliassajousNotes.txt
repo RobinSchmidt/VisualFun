@@ -58,6 +58,7 @@ Observations for n=2, m=3:
  -maybe drive should be only positive
  -the shape by which drive is modulated may be something other than sine - maybe a train of
   attack/decay envelopes with adjustable attack and decay
+-try a rational function for the drive y = (x + a) / (1 + a*x) ? was it that? -> look up
 
 
 
