@@ -28,7 +28,10 @@ function rsSaturatedSine(x, d=0)
   if(d == 0)
     return rsSin(x);
   else
-    return Math.tanh(d * rsSin(x)) / Math.tanh(d); // maybe use Math.tanh
+    //return Math.tanh(d * rsSin(x)) / Math.abs(Math.tanh(d));
+    return Math.tanh(d * rsSin(x)) / Math.abs(Math.tanh(d));
+    // somehow this abs doesn't seem to work as expected - when moving drive through zero, there's
+    // a discontinuous jump ...hmm...well...maybe that should be expected
 }
 
 /** Creates the array of vertices for a parametric curve (x,y) = f(t) in the interval t = a..b with

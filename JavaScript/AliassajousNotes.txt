@@ -55,6 +55,9 @@ Observations for n=2, m=3:
 -the drive actually doesn't do stop-and-go but deforms the shape - but that could be used for 
  rhythmic modulation - on each beat, drive should be maximum maybe negatively maximum on 
  off-beats - maybe modulate drive sinusoidally - should give a nice "pumping" effect
+ -maybe drive should be only positive
+ -the shape by which drive is modulated may be something other than sine - maybe a train of
+  attack/decay envelopes with adjustable attack and decay
 
 
 
