@@ -39,13 +39,14 @@ n sample points/vertices.
 @param {function}  f - The function that takes the parameter t and returns a 2D point.
 @param {number}    a - Start of the interval for t.
 @param {number}    b - End of the interval for t.
-@param {number}   [n=200] - Number of sample points.     */
+@param {number}    n - Number of sample points.     */
 function rsCurveVertices(f, a, b, n)
 {
   return [...Array(n+1).keys()].map(k => f(a + (b-a) * k/n));
 }
 // actually, i think f could also return a 3D point
-
+// ..hmm - actually, it produces n+1 vertices, if f is perdiodic with period b-a, the last one will
+// be the same as the first and the curve will be closed
 
 //-------------------------------------------------------------------------------------------------
 // Library functions that depend of p5.js:
