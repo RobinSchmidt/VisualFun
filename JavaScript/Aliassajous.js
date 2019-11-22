@@ -1,3 +1,6 @@
+// Bugs:
+// -somehow, the speed seems to be too high
+
 tEnd = 0; // a global variable for the endpoint of our curve
 // can be tweaked to "fast-forward" at 50, something interesting happens
 // rename to numCycles or curveLength
@@ -17,6 +20,18 @@ function rsLines(p)
     line(p[i][0], p[i][1], p[i+1][0], p[i+1][1]);
 }
 
+/** Creates the array of vertices for a parametric curve (x,y) = f(t) in the interval t = a..b with
+n sample points/vertices.
+@param {function}  f - The function that takes the parameter t and returns a 2D point.
+@param {number}    a - Start of the interval for t.
+@param {number}    b - End of the interval for t.
+@param {number}   [n=200] - Number of sample points.     */
+function rsCurveVertices(f, a, b, n)
+{
+  return [...Array(n+1).keys()].map(k => f(a + (b-a) * k/n));
+}
+// actually, i think f could also return a 3D point
+
 /** Draws a parametric curve (x,y) = f(t) in the interval t = a..b with n sample points 
 @param {function}  f - The function that takes the parameter t and returns a 2D point.
 @param {number}    a - Start of the interval for t.
@@ -24,7 +39,7 @@ function rsLines(p)
 @param {number}   [n=200] - Number of sample points.     */
 function rsCurveWithLines(f, a, b, n = 200)
 {
-  rsLines([...Array(n+1).keys()].map(k => f(a + (b-a) * k/n)));
+  rsLines(rsCurveVertices(f, a, b, n));
 }
 // factor out a function that returns the vertex-array - maybe rsCurveVertices
 
@@ -63,8 +78,8 @@ function rsLissajous(n, m, numLines, a, b, drive)
 
 
   // this should be done by a function rsSymmetrize(array, N)
-  //rsCurveWithLines(t => [s*rsSaturatedSine(-n*t,   drive), s*rsSaturatedSine(-m*t+p, drive)], a, b, numLines);
-  //rsCurveWithLines(t => [s*rsSaturatedSine(-m*t+p, drive), s*rsSaturatedSine(-n*t,   drive)], a, b, numLines);
+  rsCurveWithLines(t => [s*rsSaturatedSine(-n*t,   drive), s*rsSaturatedSine(-m*t+p, drive)], a, b, numLines);
+  rsCurveWithLines(t => [s*rsSaturatedSine(-m*t+p, drive), s*rsSaturatedSine(-n*t,   drive)], a, b, numLines);
   // re-factor to avoid the code duplication! make a function rsCurveSymmetrized(f, a, b, n)
 }
 
@@ -82,10 +97,12 @@ function rsAliassajous()
 {
   // maybe factor out into rsSetupPlot:
   translate(width/2, height/2);             // puts origin at the center of the canvas
-  let scaleFactor = min(width,height)/2;    // number of pixels for a unit distance
+  var scaleFactor = min(width,height)/2/sqrt(2);    // number of pixels for a unit distance
   scale(scaleFactor, scaleFactor)           // the minus for the y-axis let's the y-axis go upward
 
-  //rotate(PI / 4.0); // maybe get rid of that - apply rotations internally in rsLissajous
+  rotate(PI / 4.0); // maybe get rid of that - apply rotations internally in rsLissajous
+  //scaleFactor *= sqrt(1/2); // when rotating, we can't use the full space
+  //scaleFactor /= 4;
 
   // user parameters:
   var numLines = settings.NumLines;  
