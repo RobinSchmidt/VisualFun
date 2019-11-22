@@ -1,4 +1,7 @@
 todo: 
+ -maybe let the file Aliassajous import p5.js and dat.gui.js, so the html file doesn't have to
+  -> cleaner dependency handling (the script carries its dependencies with it rather than relying
+  on outside html code doing the right thing)
  -optionally display the curve length tEnd
  -to figure out an appropriate function, tweak the start-value of tEnd - try values 0, 50, 100
   and try to find a function that works well for all 3 values - maybe it should be something 

@@ -3,25 +3,48 @@ tEnd = 0; // a global variable for the endpoint of our curve
 // rename to numCycles or curveLength
 
 //-------------------------------------------------------------------------------------------------
-// code that may be factored out into a library at some point:
+// code that may be factored out into a library at some point - split the functions into those 
+// that require p5.js and those that don't (math-functions, waveforms, etc.)
 
-function rsLines(points)
+/** Draws a bunch of lines from an array of points/vertices. Note that with transparency, this will
+look different from drawing the same array of vertices using 
+beginShape();vertex();vertex()...,;endShape(); even with noFill because at the joints of the lines, 
+pixels will be drawn twice. 
+@param {Array} p - An array of points/vertices */
+function rsLines(p)
 {
   for(var i = 0; i < points.length-1; i++)
-    line(points[i][0], points[i][1], points[i+1][0], points[i+1][1]);
+    line(p[i][0], p[i][1], p[i+1][0], p[i+1][1]);
 }
 
-function rsCurve(f, a, b, n = 200)
+/** Draws a parametric curve (x,y) = f(t) in the interval t = a..b with n sample points 
+@param {function}  f - The function that takes the parameter t and returns a 2D point.
+@param {number}    a - Start of the interval for t.
+@param {number}    b - End of the interval for t.
+@param {number}   [n=200] - Number of sample points.     */
+function rsCurveWithLines(f, a, b, n = 200)
 {
   rsLines([...Array(n+1).keys()].map(k => f(a + (b-a) * k/n)));
 }
 
-function rsSaturatedSine(x, drive=0)
+/** Returns a sinusoidal function with unit period, i.e. the period is 1 rather than 2*PI as it
+would be for the regular sine function. 
+@param {number} x - Argument, typically in the range 0..1 */
+function rsSin(x)
+{
+  return sin(2*PI*x); // maybe use Math.sin to make it independent from p5.js
+}
+
+/** Computes a unit-period sine wave that goes through a tanh waveshaper. The amplitude loss due to
+the waveshaping is compensated for such that the final wave has unit amplitude again.  
+@param {number} x - Argument, typically in the range 0..1
+@param {number} [d=0] - Drive - the higher, the more squarewave-like the output becomes. */
+function rsSaturatedSine(x, d=0)
 {
   if(drive == 0)
-    return sin(x);
+    return rsSin(x);
   else
-    return tanh(drive * sin(x)) / tanh(drive);
+    return tanh(d * rsSin(x)) / tanh(d); // maybe use Math.tanh
 }
 
 //-------------------------------------------------------------------------------------------------
@@ -31,11 +54,12 @@ function rsSaturatedSine(x, drive=0)
 function rsLissajous(n, m, numLines, a, b, drive)
 {
   s = -1;
-  rsCurve(t => [s*rsSaturatedSine( n*t,     drive), s*rsSaturatedSine( m*t+PI, drive)], a, b, numLines);
-  rsCurve(t => [s*rsSaturatedSine( m*t+ PI, drive), s*rsSaturatedSine( n*t,    drive)], a, b, numLines);
-  rsCurve(t => [s*rsSaturatedSine(-n*t,     drive), s*rsSaturatedSine(-m*t+PI, drive)], a, b, numLines);
-  rsCurve(t => [s*rsSaturatedSine(-m*t+PI,  drive), s*rsSaturatedSine(-n*t,    drive)], a, b, numLines);
-  // re-factor to avoid the code duplication!
+  p = PI/2;
+  rsCurveWithLines(t => [s*rsSaturatedSine( n*t,   drive), s*rsSaturatedSine( m*t+p, drive)], a, b, numLines);
+  rsCurveWithLines(t => [s*rsSaturatedSine( m*t+p, drive), s*rsSaturatedSine( n*t,   drive)], a, b, numLines);
+  rsCurveWithLines(t => [s*rsSaturatedSine(-n*t,   drive), s*rsSaturatedSine(-m*t+p, drive)], a, b, numLines);
+  rsCurveWithLines(t => [s*rsSaturatedSine(-m*t+p, drive), s*rsSaturatedSine(-n*t,   drive)], a, b, numLines);
+  // re-factor to avoid the code duplication! make a function rsCurveSymmetrized(f, a, b, n)
 }
 
 // User parameters - some of them can be controlled by the GUI:
