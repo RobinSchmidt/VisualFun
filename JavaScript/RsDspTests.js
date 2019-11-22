@@ -1,4 +1,4 @@
-// global variables:
+// global variables - maybe wrap into object rsTimeInfo:
 rsFrameRate   = 0;
 rsElapsedTime = 0;  // elapsed time (in seconds) since intialization
 rsTimeDelta   = 0;
@@ -17,29 +17,21 @@ rsTimeDelta   = 0;
 
 */
 
-/*
-function ExpDecayFilter()
+ExpDecayFilter = function(timeConstant)
 {
-  var tau = 1;
-
-  flt =
+  this.tau   = timeConstant;
+  this.state = 0;
+  this.getSample = function(x, dt) // x: input value, dt: time-delta between this and previous sample
   {
-    foo: 0,  // test
-
-    function: setTimeConstant(newTau) { tau = newTau; },
-    function: getSample(dt) 
-    {
-
-    }
-
-
+    return 0;  // preliminary
   }
-
-
+  this.reset = function()
+  {
+    this.state = 0;
+  }
 }
 
-*/
-
+// make classes for rsImpulseGenerator, rsSawOscillator
 
 
 //--------------------------------------------------------------------------------------------------
@@ -51,6 +43,9 @@ function rsTestExpDecayFilter()
   var time   = rsElapsedTime % period;
 
   background(0);
+
+  flt = new ExpDecayFilter(1.0); // time-constant tau is 1.0 seconds
+
 
 
   // print out time info (factor out int rsPrintTimeInfo):
@@ -85,7 +80,7 @@ function setup()
 
 function draw() 
 {
-  // update global time variables
+  // update global time variables (maybe factor out into rsUpdateTimeInfo)
   rsFrameRate = frameRate();
   if(rsFrameRate > 0)
     rsTimeDelta = 1/rsFrameRate;
