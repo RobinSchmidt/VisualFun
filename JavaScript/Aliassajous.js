@@ -7,13 +7,13 @@ tEnd = 0; // a global variable for the endpoint of our curve
 
 function rsLines(points)
 {
-	for(var i = 0; i < points.length-1; i++)
+  for(var i = 0; i < points.length-1; i++)
     line(points[i][0], points[i][1], points[i+1][0], points[i+1][1]);
 }
 
 function rsCurve(f, a, b, n = 200)
 {
-	rsLines([...Array(n+1).keys()].map(k => f(a + (b-a) * k/n)));
+  rsLines([...Array(n+1).keys()].map(k => f(a + (b-a) * k/n)));
 }
 
 function rsSaturatedSine(x, drive=0)
@@ -30,7 +30,7 @@ function rsSaturatedSine(x, drive=0)
 
 function rsLissajous(n, m, numLines, a, b, drive)
 {
-	s = -1;
+  s = -1;
   rsCurve(t => [s*rsSaturatedSine( n*t,     drive), s*rsSaturatedSine( m*t+PI, drive)], a, b, numLines);
   rsCurve(t => [s*rsSaturatedSine( m*t+ PI, drive), s*rsSaturatedSine( n*t,    drive)], a, b, numLines);
   rsCurve(t => [s*rsSaturatedSine(-n*t,     drive), s*rsSaturatedSine(-m*t+PI, drive)], a, b, numLines);
@@ -50,11 +50,11 @@ settings =
 
 function rsAliassajous()
 {
-	// maybe factor out into rsSetupPlot:
-	translate(width/2, height/2);             // puts origin at the center of the canvas
-	let scaleFactor = min(width,height)/3;    // number of pixels for a unit distance
-	scale(scaleFactor, scaleFactor)           // the minus for the y-axis let's the y-axis go upward
-	rotate(PI / 4.0);
+  // maybe factor out into rsSetupPlot:
+  translate(width/2, height/2);             // puts origin at the center of the canvas
+  let scaleFactor = min(width,height)/3;    // number of pixels for a unit distance
+  scale(scaleFactor, scaleFactor)           // the minus for the y-axis let's the y-axis go upward
+  rotate(PI / 4.0);
 
   // user parameters:
   var numLines = settings.NumLines;  
@@ -65,21 +65,21 @@ function rsAliassajous()
 
 
 
-	background(0)  
+  background(0)  
 
   var end = 2*PI*(tEnd + settings.OffsetCoarse + settings.OffsetFine);
 
-	strokeWeight(12/scaleFactor)
-	stroke(255, 75, 200, 30);
-	rsLissajous(n, m, numLines, 0, end)
+  strokeWeight(12/scaleFactor)
+  stroke(255, 75, 200, 30);
+  rsLissajous(n, m, numLines, 0, end)
 
   strokeWeight(6/scaleFactor)
-	stroke(200, 75, 255, 60);
-	rsLissajous(n, m, numLines, 0, end)
+  stroke(200, 75, 255, 60);
+  rsLissajous(n, m, numLines, 0, end)
 
-	strokeWeight(1/scaleFactor)
-	stroke(255, 255, 255, 120);
-	rsLissajous(n, m, numLines, 0, end)
+  strokeWeight(1/scaleFactor)
+  stroke(255, 255, 255, 120);
+  rsLissajous(n, m, numLines, 0, end)
 
   // factor out the 3 calls into 1
 
@@ -97,7 +97,7 @@ function rsAliassajous()
   // compute time increment based on frame rate and desired periodicty:
   dt =  freq / frameRate();
   if(!isFinite(dt)) // sanity check necessary - it seems, frameRate may sometimes return 0
-  	dt = 0.01*freq;
+    dt = 0.01*freq;
 
   dt *= 1 / (1+tEnd*freq); // slow down over time to counteract vertex acceleration
   // seems like 1 / (1+tEnd/period) is a good choice
@@ -112,7 +112,7 @@ function rsAliassajous()
 
 function setup() 
 {
-	createCanvas(windowWidth, windowHeight);
+  createCanvas(windowWidth, windowHeight);
 
   // create and set up the GUI:
   var gui = new dat.GUI();
@@ -124,5 +124,5 @@ function setup()
 
 function draw() 
 {
-	rsAliassajous();
+  rsAliassajous();
 }
