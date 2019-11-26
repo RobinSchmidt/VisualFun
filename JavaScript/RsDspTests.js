@@ -40,6 +40,9 @@ ExpDecayFilter = function(timeConstant)
     this.state = a * x + bdt * this.state;
     return this.state;
   }
+  // maybe this should be put into the prototype
+  // todo: move this into a file rsSignalFilters.js and make a test script and html file that plots
+  // the impulse response with grafica
 
   /*
   this.getSample = function(x, dt) // x: input value, dt: time-delta between this and previous sample
