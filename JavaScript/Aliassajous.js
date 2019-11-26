@@ -89,7 +89,7 @@ settings =
   OffsetCoarse: 0,
   OffsetFine: 0,
   Drive: 0,
-  ShowIntervalEnd: true  // for figuring out, where interesing things happen
+  ShowIntervalEnd: false  // for figuring out, where interesing things happen
 }
 
 function rsCreateAliassajousGui()

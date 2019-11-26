@@ -1,3 +1,8 @@
+// Bugs:
+// when a different tab is open and we switch back, the radius of the circle has grow large 
+// - maybe the value returned by frameRate is different when the tab is inactive? maybe log
+// the framerate to a file
+
 // global variables - maybe wrap into object rsTimeInfo:
 rsFrameRate   = 0;
 rsElapsedTime = 0;  // elapsed time (in seconds) since intialization

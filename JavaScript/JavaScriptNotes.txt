@@ -1,0 +1,25 @@
+
+For computation heavy stuff, we may use this:
+
+https://developer.mozilla.org/en-US/docs/Mozilla/Projects/Emscripten
+https://research.mozilla.org/webassembly/
+
+https://hacks.mozilla.org/2017/02/a-cartoon-intro-to-webassembly/
+https://hacks.mozilla.org/2017/02/a-crash-course-in-just-in-time-jit-compilers/
+https://hacks.mozilla.org/2017/02/a-crash-course-in-assembly/
+
+try to replicate something like that:
+http://www.malinc.se/m/JuliaSets.php
+
+Libraries:
+http://microjs.com/#
+  https://github.com/pvorb/clone
+  https://bitstorm.org/javascript/miq/
+  https://github.com/SimonWaldherr/ColorConverter.js/blob/master/colorconverter.js
+  https://github.com/dkraczkowski/dom.js
+  
+  http://microjs.com/#canvas
+
+
+Google Chrome Develeoper Tools - troubleshooting:
+https://stackoverflow.com/questions/19654081/change-to-this-file-were-not-saved-to-file-system-error-in-google-chrome-version
