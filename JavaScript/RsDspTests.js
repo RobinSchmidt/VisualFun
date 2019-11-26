@@ -29,19 +29,19 @@ ExpDecayFilter = function(timeConstant)
 
   this.getSample = function(x, dt) // x: input value, dt: time-delta between this and previous sample
   {
-    var b = 0.25;  
-    //var a = 1;  // more suitable for visual work - DC gain depends on tau, but maximum size does not
-                  // hmmm... is this true? maybe have a function getImpulseScaleFactor or something
-
-    var a = 1-b;
-    // prelimiary - todo: compute coeffs from timeConstant (factor out computation function)
-
-    var bdt = Math.pow(b, dt);
-
+    if(dt <= 0) // sanity check - we are a bit defensive here
+      return x;  
+    //var b      = exp(-dt / this.tau);  // verify this formula - decay seems too slow
+    var b      = exp(-1 / this.tau);
+    //b = 0.25; //test
+    var a      = 1 - b;
+    var bdt    = Math.pow(b, dt);
     this.state = a * x + bdt * this.state;
-  
     return this.state;
   }
+
+  // maybe instead of the the update formula with bdt, simply use the naive formula with recomputed b
+  // we shall *not* recompute b *and* use the bdt update formula - it's either/or
   // has no normalization - implement with normalization - see c++ implementation of rsNonUniformOnePole
 
 
@@ -58,13 +58,14 @@ ExpDecayFilter = function(timeConstant)
 // Test and experimentation functions:
 
 rsTimeCounter = 0;
-flt = new ExpDecayFilter(1.0); // time-constant tau is 2.0 seconds (time constant not yet functional)
+flt = new ExpDecayFilter(0.5); // time-constant tau is 2.0 seconds (time constant) 
+//  decay seems to be too slow - bug in the filter coefficient computation formula?
 
 // maybe put to top
 
 function rsTestExpDecayFilter()
 {
-  var bpm = 140;
+  var bpm = 100;
 
   //var period = 0.5;
   var period = 60 / bpm;
