@@ -27,6 +27,7 @@ ExpDecayFilter = function(timeConstant)
   this.tau   = timeConstant;
   this.state = 0;
 
+  
   this.getSample = function(x, dt) // x: input value, dt: time-delta between this and previous sample
   {
     if(dt <= 0) // sanity check - we are a bit defensive here
@@ -40,6 +41,18 @@ ExpDecayFilter = function(timeConstant)
     return this.state;
   }
 
+  /*
+  this.getSample = function(x, dt) // x: input value, dt: time-delta between this and previous sample
+  {
+    if(dt <= 0) // sanity check - we are a bit defensive here
+      return x;  
+    //var b      = exp(-dt / this.tau);  // verify this formula - decay seems too slow
+    b = 0.25; //test
+    this.state = (1-b)*x + b*this.state;
+    return this.state;
+  }
+  */
+
   // maybe instead of the the update formula with bdt, simply use the naive formula with recomputed b
   // we shall *not* recompute b *and* use the bdt update formula - it's either/or
   // has no normalization - implement with normalization - see c++ implementation of rsNonUniformOnePole
@@ -52,6 +65,19 @@ ExpDecayFilter = function(timeConstant)
 }
 
 // make classes for rsImpulseGenerator, rsSawOscillator
+// plot impulse-response - which library can we use for plotting?
+// 
+// https://plot.ly/javascript/
+// https://lisacharlotterost.de/2016/05/17/one-chart-code/
+// https://en.wikipedia.org/wiki/Comparison_of_JavaScript_charting_libraries
+
+// based on p5js
+// https://github.com/jagracar/grafica.js
+
+// also nice:
+// https://bitcraftlab.github.io/p5.gui/
+// https://bitcraftlab.github.io/p5.gui/examples/quicksettings-1/
+// https://github.com/Dozed12/p5.voronoi
 
 
 //--------------------------------------------------------------------------------------------------
