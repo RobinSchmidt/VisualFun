@@ -23,3 +23,33 @@ http://microjs.com/#
 
 Google Chrome Develeoper Tools - troubleshooting:
 https://stackoverflow.com/questions/19654081/change-to-this-file-were-not-saved-to-file-system-error-in-google-chrome-version
+
+
+
+import/export:
+https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Statements/import
+https://javascript.info/import-export
+
+Before declaration of a class/function/...:
+  export [default] class/function/variable ...
+  
+Standalone export:
+  export {x [as y], ...}
+  
+Re-export:
+  export {x [as y], ...} from "module"
+  export * from "module" (doesn’t re-export default).
+  export {default [as y]} from "module" (re-export default).
+  Import:
+
+Named exports from module:
+  import {x [as y], ...} from "module"
+
+Default export:
+  import x from "module"
+  import {default as x} from "module"
+
+Everything:
+  import * as obj from "module"
+  Import the module (its code runs), but do not assign it to a variable:
+  import "module"

@@ -26,6 +26,7 @@ ExpDecayFilter = function(timeConstant)
 {
   this.tau   = timeConstant;
   this.state = 0;
+  // maybe move to bottom - implementation details should be irrelevant to client code
 
   
   this.getSample = function(x, dt) // x: input value, dt: time-delta between this and previous sample
@@ -44,28 +45,17 @@ ExpDecayFilter = function(timeConstant)
   // todo: move this into a file rsSignalFilters.js and make a test script and html file that plots
   // the impulse response with grafica
 
-  /*
-  this.getSample = function(x, dt) // x: input value, dt: time-delta between this and previous sample
-  {
-    if(dt <= 0) // sanity check - we are a bit defensive here
-      return x;  
-    //var b      = exp(-dt / this.tau);  // verify this formula - decay seems too slow
-    b = 0.25; //test
-    this.state = (1-b)*x + b*this.state;
-    return this.state;
-  }
-  */
-
   // maybe instead of the the update formula with bdt, simply use the naive formula with recomputed b
   // we shall *not* recompute b *and* use the bdt update formula - it's either/or
   // has no normalization - implement with normalization - see c++ implementation of rsNonUniformOnePole
-
 
   this.reset = function()
   {
     this.state = 0;
   }
 }
+// maybe use this syntax:
+// https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Classes
 
 // make classes for rsImpulseGenerator, rsSawOscillator
 // plot impulse-response - which library can we use for plotting?
