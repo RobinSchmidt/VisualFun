@@ -5,7 +5,7 @@ let plotExpDecImpResp = function(p) {
   p.setup = function() {
 
 		// Create the canvas
-		var canvas = p.createCanvas(500, 350);
+		var canvas = p.createCanvas(450, 350);
 		p.background(150);
 
 		// Prepare the points for the plot
@@ -18,9 +18,10 @@ let plotExpDecImpResp = function(p) {
 
 		// Create a new plot and set its position on the screen
 		var plot = new GPlot(p);
-		plot.setPos(25, 25);
+    plot.setPos(10, 10);      // top-left corner
+    plot.setDim([250, 150]);  // width, height
 
-		// Set the plot title and the axis labels
+    // Set the plot title and the axis labels
 		plot.setPoints(points);
 		plot.getXAxis().setAxisLabelText("x axis");
 		plot.getYAxis().setAxisLabelText("y axis");
@@ -39,6 +40,10 @@ let plotExpDecImpResp = function(p) {
   };
   */
 };
+
+// it seems, when calling createCanvas multiple times, the canvases are alway paced next tp each other
+// an wrapping them into a table doesn't seem to have any effect - it seems, they are not wrapped at 
+// all and instead appear next to the table
 
 //let myp5 = new p5(plotExpDecImpResp);
 
