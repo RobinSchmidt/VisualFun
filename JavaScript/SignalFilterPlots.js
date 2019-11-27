@@ -1,4 +1,4 @@
-let sketch = function(p) {
+let plotExpDecImpResp = function(p) {
   let x = 100;
   let y = 100;
 
@@ -13,7 +13,7 @@ let sketch = function(p) {
   };
 };
 
-let myp5 = new p5(sketch);
+let myp5 = new p5(plotExpDecImpResp);
 
 
 /*
