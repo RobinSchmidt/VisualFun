@@ -13,7 +13,7 @@ let plotExpDecImpResp = function(p) {
   };
 };
 
-let myp5 = new p5(plotExpDecImpResp);
+//let myp5 = new p5(plotExpDecImpResp);
 
 
 /*
