@@ -3,62 +3,21 @@
 // - maybe the value returned by frameRate is different when the tab is inactive? maybe log
 // the framerate to a file
 
+//import "rsSignalFilters.js;"
+// doesn'k work - i get the error: Cannot use import statement outside a module
+// see
+// https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Statements/import
+// so, for the time being, the js file will be loaded in the html file right befor this file
+
 // global variables - maybe wrap into object rsTimeInfo:
 rsFrameRate   = 0;
 rsElapsedTime = 0;  // elapsed time (in seconds) since intialization
 rsTimeDelta   = 0;
 
-
-
-
-
-
-
-
 //--------------------------------------------------------------------------------------------------
 // Library functions under construction (are moved to rs.dsp.js, when finished):
 
-/** Constructor of an exponentaial decay filter
-
-*/
-
-ExpDecayFilter = function(timeConstant)
-{
-  this.tau   = timeConstant;
-  this.state = 0;
-  // maybe move to bottom - implementation details should be irrelevant to client code
-
-  
-  this.getSample = function(x, dt) // x: input value, dt: time-delta between this and previous sample
-  {
-    if(dt <= 0) // sanity check - we are a bit defensive here
-      return x;  
-    //var b      = exp(-dt / this.tau);  // verify this formula - decay seems too slow
-    var b      = exp(-1 / this.tau);
-    //b = 0.25; //test
-    var a      = 1 - b;
-    var bdt    = Math.pow(b, dt);
-    this.state = a * x + bdt * this.state;
-    return this.state;
-  }
-  // maybe this should be put into the prototype
-  // todo: move this into a file rsSignalFilters.js and make a test script and html file that plots
-  // the impulse response with grafica
-
-  // maybe instead of the the update formula with bdt, simply use the naive formula with recomputed b
-  // we shall *not* recompute b *and* use the bdt update formula - it's either/or
-  // has no normalization - implement with normalization - see c++ implementation of rsNonUniformOnePole
-
-  this.reset = function()
-  {
-    this.state = 0;
-  }
-}
-// maybe use this syntax:
-// https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Classes
-
-// make classes for rsImpulseGenerator, rsSawOscillator
-// plot impulse-response - which library can we use for plotting?
+// todo plot impulse-response of expDecayFilter - which library can we use for plotting?
 // 
 // https://plot.ly/javascript/
 // https://lisacharlotterost.de/2016/05/17/one-chart-code/
@@ -71,6 +30,11 @@ ExpDecayFilter = function(timeConstant)
 // https://bitcraftlab.github.io/p5.gui/
 // https://bitcraftlab.github.io/p5.gui/examples/quicksettings-1/
 // https://github.com/Dozed12/p5.voronoi
+
+// i think, i should use grafica here
+// make a html file for plotting the ExpDecayFilter impulse response...or maybe put several plots
+// into one html file...maybe even with guis - call it SignalFilterPlots.html/js or maybe 
+// SignalFilterTests
 
 
 //--------------------------------------------------------------------------------------------------
@@ -106,12 +70,6 @@ function rsTestExpDecayFilter()
 
   // filter the impulse:
   var filteredImpulse = flt.getSample(impulse, rsTimeDelta);
-
-
-
-
-
-
 
 
   // print out time info (factor out int rsPrintTimeInfo):
@@ -163,6 +121,8 @@ function rsTestExpDecayFilter()
 }
 // the goal is to get a nice pumping effect that can be used to modulate parameters with the beat 
 // of the music - such as size, brightness, color, line-thickness, rotation, shear
+
+// provide a gui to turn the blinking on/off - it's annoying
 
 
 
