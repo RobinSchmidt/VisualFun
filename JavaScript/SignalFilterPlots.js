@@ -1,25 +1,25 @@
 let plotExpDecImpResp = function(p) {
-  let x = 100;
-  let y = 100;
 
   p.setup = function() {
 
+    // Settings:
+    var width  = 500;
+    var height = 300;
+    var margin = 0;
+
 		// Create the canvas
-		var canvas = p.createCanvas(450, 350);
+		var canvas = p.createCanvas(width, height);
 		p.background(150);
 
 		// Prepare the points for the plot
 		var points = [];
-		var seed = 100 * p.random();
-
-		for (var i = 0; i < 100; i++) {
-			points[i] = new GPoint(i, 10 * p.noise(0.1 * i + seed));
-		}
+		for (var i = 0; i < 100; i++)
+      points[i] = new GPoint(i, Math.sin(i/10));
 
 		// Create a new plot and set its position on the screen
 		var plot = new GPlot(p);
-    plot.setPos(10, 10);      // top-left corner
-    plot.setDim([250, 150]);  // width, height
+    plot.setPos(margin, margin);                     // top-left corner
+    plot.setDim([width-2*margin, height-2*margin]);  // width, height
 
     // Set the plot title and the axis labels
 		plot.setPoints(points);
@@ -31,6 +31,7 @@ let plotExpDecImpResp = function(p) {
 		plot.defaultDraw();
 		p.noLoop();
   };
+
 
   /*
   p.draw = function() {
