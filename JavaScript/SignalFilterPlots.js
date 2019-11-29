@@ -1,6 +1,6 @@
 function rsPlotPoints(p, points, width=600, height=300)
 {
-  var margin = 0;
+  var margin = 0; 
   var dimCorrection = -100;
   // Hack: for some weird reason, the setDim function of GPlot makes the plots 100 pixels too 
   // wide and high, so we need this correction -> figure out, what's wrong with grafica here
@@ -12,7 +12,7 @@ function rsPlotPoints(p, points, width=600, height=300)
   // Create a new plot and set its position on the screen
   var plot = new GPlot(p);
   plot.setPos(margin, margin);  // top-left corner
-  plot.setDim([width - margin + dimCorrection, height - margin + dimCorrection]); 
+  plot.setDim([width - 2*margin + dimCorrection, height - 2*margin + dimCorrection]); 
 
   // Set the plot title and the axis labels:
   plot.setPoints(points);
@@ -24,6 +24,10 @@ function rsPlotPoints(p, points, width=600, height=300)
   plot.defaultDraw();
   p.noLoop();
 }
+// todo: figure out, how to control the colors of background, axes, graph, etc. - maybe implement
+// convenience setup funtions that realize different color-schemes - like dark-on-bright (suitable 
+// for print) or bright-on-dark (suitable for screen)
+// also figure out, hwo to control axis ticks etc.
 
 function rsPlotXY(p, x, y, width=600, height=300)
 {
@@ -33,62 +37,28 @@ function rsPlotXY(p, x, y, width=600, height=300)
     points[i] = new GPoint(x[i], y[i]);
   rsPlotPoints(points, width, height);
 }
+// what sort of object is p? figure out choose an appropriate name - do we need it? 
+// in the html-document, we call:
+// let plot1 = new p5(examplePlot);
+// is p some p5 object? apparently, as we call p5 functions like createCanvas on it? so how does 
+// this work? the new p5 object calls a user-supplied function like our examplePlot, passing 
+// itself als argument? -> look up documentation
+// we may have to pass this "p" object as additional parameter into our plotting functions
+// how can we make plotting functions that don't need a "p"?
 
-// what sort of object is p? figure out choose an appropriate name
 
 
 
-
-let examplePlot = function(p) {
-
-  // what is the argmuent p? in the html-document, we call:
-  // let plot1 = new p5(examplePlot);
-  // is p some p5 object? apparently, as we call p5 functions like createCanvas on it? so how does 
-  // this work? the new p5 object calls a user-supplied function like our examplePlot, passing 
-  // itself als argument? -> look up documentation
-  // we may have to pass this "p" object as additional parameter into our plotting functions
+let rsPlotSine = function(p) {
 
   p.setup = function() {
 
-    /*
-    // Settings:
-    var width  = 600;
-    var height = 300;
-    var margin = 0;
-
-
-    var dimCorrection = -100;
-    // Hack: for some weird reason, the setDim function of GPlot makes the plots 100 pixels too 
-    // wide and high, so we need this correction -> figure out, what's wrong with grafica here
-
-    // Create the canvas
-    var canvas = p.createCanvas(width, height);
-    p.background(150);
-    */
-
-    // Prepare the points for the plot
+    // Prepare the points for the plot (factor out)
     var points = [];
     for (var i = 0; i < 100; i++)
-      points[i] = new GPoint(i, Math.sin(i / 10));
+     points[i] = new GPoint(i/10, Math.sin(i / 10));
 
     rsPlotPoints(p, points);
-
-    /*
-    // Create a new plot and set its position on the screen
-    var plot = new GPlot(p);
-    plot.setPos(margin, margin);  // top-left corner
-    plot.setDim([width-margin+dimCorrection, height-margin+dimCorrection]); 
-
-    // Set the plot title and the axis labels
-    plot.setPoints(points);
-    plot.getXAxis().setAxisLabelText("x axis");
-    plot.getYAxis().setAxisLabelText("y axis");
-    plot.setTitleText("A very simple example");
-
-    // Draw it!
-    plot.defaultDraw();
-    p.noLoop();
-    */
   };
 
   /*
