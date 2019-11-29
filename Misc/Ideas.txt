@@ -1,6 +1,6 @@
 make a couple of small(ish) js libraries with clearly defined and limited scope:
 
-rsCore: basic infractructure stuff like deep-copies, data-handling
+rsCore: basic infractructure stuff like deep-copies, data-handling, error-handling
 
 rsDom: DOM traversal and manipulation convenience functions - but maybe use jquery
 

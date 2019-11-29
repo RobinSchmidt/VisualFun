@@ -1,3 +1,10 @@
+// move to library rsCore.js
+function rsAssert(condition, message) {
+    if (!condition) {
+        throw message || "Assertion failed";
+    }
+}
+
 //-------------------------------------------------------------------------------------------------
 // move into a library rsPlotting.js or rsPlotViaGrafica:
 
@@ -33,10 +40,11 @@ function rsPlotPoints(p, points, width=600, height=300)
 function rsPlotXY(p, x, y, width=600, height=300)
 {
   // todo: check that x and y have the same size
+  rsAssert(x.length == y.length)
   var points = [];
   for (var i = 0; i < x.length; i++)
     points[i] = new GPoint(x[i], y[i]);
-  rsPlotPoints(points, width, height);
+  rsPlotPoints(p, points, width, height);
 }
 // what sort of object is p? figure out choose an appropriate name - do we need it? 
 // in the html-document, we call:
@@ -112,16 +120,21 @@ let rsExpDecayImpResp = function(p)
     dt = 1/frameRate;
     numPoints = 200;
     filter = new ExpDecayFilter(0.5);
-    points = [];
-    points[0] = new GPoint(0, filter.getSample(1, dt));
+    x = [];
+    y = [];
+    x[0] = 0;
+    y[0] = filter.getSample(1, dt);
     for(i = 1; i < numPoints; i++)
-      points[i] = new GPoint(i*dt, filter.getSample(0, dt));
-    // get rid of using GPoint here - create arrays x,y and the use rsPlotPointsXY
+    {
+      x[i] = i*dt;
+      y[i] = filter.getSample(0, dt);
+    }
+
+    rsPlotXY(p, x, y, width, height);
 
 
-    rsPlotPoints(p, points, width, height);
+    //rsPlotPoints(p, points, width, height);
     //rsPlotPoints(p, rsGetSinePoints(100), width, height);
-
 
     p.noLoop();
   };
