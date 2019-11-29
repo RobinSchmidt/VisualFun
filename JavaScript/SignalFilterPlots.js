@@ -39,7 +39,6 @@ function rsPlotPoints(p, points, width=600, height=300)
 
 function rsPlotXY(p, x, y, width=600, height=300)
 {
-  // todo: check that x and y have the same size
   rsAssert(x.length == y.length)
   var points = [];
   for (var i = 0; i < x.length; i++)
@@ -110,36 +109,37 @@ let rsExpDecayImpResp = function(p)
 
   p.setup = function () {
 
-    width  = 600;
-    height = 300;
+    var width  = 600;
+    var height = 300;
     var canvas = p.createCanvas(width, height);
     p.background(150); // maybe use black later
 
     // create data to plot:
-    frameRate = 60;
-    dt = 1/frameRate;
-    numPoints = 200;
-    filter = new ExpDecayFilter(0.5);
-    x = [];
-    y = [];
+    var frameRate = 60;
+    var dt = 1/frameRate;
+    var numPoints = 200;
+    var randomness = 0.1*dt;
+    var filter = new ExpDecayFilter(0.5);
+    var x = [];
+    var y = [];
+    var t = 0;
     x[0] = 0;
     y[0] = filter.getSample(1, dt);
     for(i = 1; i < numPoints; i++)
     {
-      x[i] = i*dt;
+      t += dt;
+      //x[i] = i*dt;
+      x[i] = t;
       y[i] = filter.getSample(0, dt);
     }
+    // todo: add random variation to the time-instants: dt_i = dt + rand(...)
+    // x[i] = x[i-1] + dt_i
+    // y[i] = filter.getSample(0, dt_i);
+
 
     rsPlotXY(p, x, y, width, height);
-
-
-    //rsPlotPoints(p, points, width, height);
-    //rsPlotPoints(p, rsGetSinePoints(100), width, height);
-
     p.noLoop();
   };
-
-
 }
 
 
