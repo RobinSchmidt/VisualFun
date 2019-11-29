@@ -184,6 +184,12 @@ function rsAliassajous()
   // seems like 1 / (1+tEnd/period) is a good choice
   // maybe try to re-parameterize to a natural parametrization - or generally of different 
   // "warpings" of the parametrization ...maybe FM could be useful for this?
+  // trying to compute the arc-length function of (sin(n*t), cos(m*t)):
+  // Integrate[ Sqrt[n^2 * Cos[n*t]^2 + m^2 * Sin[m*t]^2] , {t,0,c} ]
+  // ..seems like mathematica can't solve this analytically (verify, if the function is actually 
+  // correct)....sooo - we need a numerical integration routine - implement trapezoidal 
+  // integration - then we need to invert that function - fortunately, it's monotonic
+  // try to plot the arc-length function
 
   // update counter with wrap around:
   tEnd = tEnd + dt;

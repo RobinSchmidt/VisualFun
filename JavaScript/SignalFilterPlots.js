@@ -24,9 +24,11 @@ function rsPlotPoints(p, points, width=600, height=300)
 
   // Set the plot title and the axis labels:
   plot.setPoints(points);
-  plot.getXAxis().setAxisLabelText("x axis");
-  plot.getYAxis().setAxisLabelText("y axis");
-  plot.setTitleText("A very simple example");
+
+  // this should be moved elsewhere:
+  //plot.getXAxis().setAxisLabelText("x axis");
+  //plot.getYAxis().setAxisLabelText("y axis");
+  //plot.setTitleText("A very simple example");
 
   // Draw it:
   plot.defaultDraw();
@@ -109,8 +111,8 @@ let rsExpDecayImpResp = function(p)
 
   p.setup = function () {
 
-    var width  = 600;
-    var height = 300;
+    var width  = 1200;
+    var height = 600;
     var canvas = p.createCanvas(width, height);
     p.background(150); // maybe use black later
 
