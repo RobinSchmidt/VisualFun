@@ -182,6 +182,8 @@ function rsAliassajous()
 
   dt *= 1 / (1+tEnd*freq); // slow down over time to counteract vertex acceleration
   // seems like 1 / (1+tEnd/period) is a good choice
+  // maybe try to re-parameterize to a natural parametrization - or generally of different 
+  // "warpings" of the parametrization ...maybe FM could be useful for this?
 
   // update counter with wrap around:
   tEnd = tEnd + dt;
