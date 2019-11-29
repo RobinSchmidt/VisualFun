@@ -1,4 +1,4 @@
-rsPlotPoints(points, width=600, height=300)
+function rsPlotPoints(points, width=600, height=300)
 {
   var dimCorrection = -100;
   // Hack: for some weird reason, the setDim function of GPlot makes the plots 100 pixels too 
@@ -19,7 +19,7 @@ rsPlotPoints(points, width=600, height=300)
   p.noLoop();
 }
 
-rsPlotXY(x, y, width=600, height=300)
+function rsPlotXY(x, y, width=600, height=300)
 {
   // todo: check that x and y have the same size
   var points = [];
