@@ -15,7 +15,7 @@ ExpDecayFilter = function(timeConstant)
     if(dt <= 0) // sanity check - we are a bit defensive here
       return x;  
     //var b      = exp(-dt / this.tau);  // verify this formula - decay seems too slow
-    var b      = exp(-1 / this.tau);
+    var b      = Math.exp(-1 / this.tau);
     //b = 0.25; //test
     var a      = 1 - b;
     var bdt    = Math.pow(b, dt);

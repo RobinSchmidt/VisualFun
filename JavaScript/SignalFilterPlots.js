@@ -1,3 +1,6 @@
+//-------------------------------------------------------------------------------------------------
+// move into a library rsPlotting.js or rsPlotViaGrafica:
+
 function rsPlotPoints(p, points, width=600, height=300)
 {
   var margin = 0; 
@@ -5,10 +8,7 @@ function rsPlotPoints(p, points, width=600, height=300)
   // Hack: for some weird reason, the setDim function of GPlot makes the plots 100 pixels too 
   // wide and high, so we need this correction -> figure out, what's wrong with grafica here
 
-  // Create the canvas:
-  var canvas = p.createCanvas(width, height); // maybe this should be doen in setup
-    // ...actually all calls on the p-object should probably be done there
-  p.background(150); // maybe use black later
+
 
   // Create a new plot and set its position on the screen
   var plot = new GPlot(p);
@@ -23,7 +23,7 @@ function rsPlotPoints(p, points, width=600, height=300)
 
   // Draw it:
   plot.defaultDraw();
-  p.noLoop();
+
 }
 // todo: figure out, how to control the colors of background, axes, graph, etc. - maybe implement
 // convenience setup funtions that realize different color-schemes - like dark-on-bright (suitable 
@@ -47,6 +47,8 @@ function rsPlotXY(p, x, y, width=600, height=300)
 // we may have to pass this "p" object as additional parameter into our plotting functions
 // how can we make plotting functions that don't need a "p"?
 
+//-------------------------------------------------------------------------------------------------
+// move into a library rsCurves.js
 
 function rsGetSinePoints(numPoints)
 {
@@ -59,11 +61,23 @@ function rsGetSinePoints(numPoints)
   }
   return points;
 }
+// Creates an array of points containing one cycle of the sine function
+// this is mostly for testing purposes - maybe make more functions like that that generate points
+// for various curves: getLissajousPoints(numPoints, numLobesX, numLobesY), getLemniscatePoints, 
+// getAstroidePoints - make a library: rsCurves
 
+//-------------------------------------------------------------------------------------------------
+
+// move to ExamplePlots:
 let rsPlotSine = function(p) {
 
-  p.setup = function() {
-    rsPlotPoints(p, rsGetSinePoints(100));
+  p.setup = function () {
+    width  = 600;
+    height = 300;
+    var canvas = p.createCanvas(width, height);
+    p.background(150); // maybe use black later
+    rsPlotPoints(p, rsGetSinePoints(100), width, height);
+    p.noLoop();
   };
 
   /*
@@ -83,28 +97,49 @@ let rsPlotSine = function(p) {
 // canvas(es) into the the top-level html-element - if not told otherwise? maybe we can pass the 
 // containign element -> check docs
 
-
-
-
-
-//let myp5 = new p5(plotExpDecImpResp);
-
-
-/*
-function plotExpDecImpResp(p)
+let rsExpDecayImpResp = function(p) 
 {
-  var canvas = p.createCanvas(500, 350);
-  p.background(150);
-}
-*/
+
+  p.setup = function () {
+
+    width  = 600;
+    height = 300;
+    var canvas = p.createCanvas(width, height);
+    p.background(150); // maybe use black later
+
+    // create data to plot:
+    frameRate = 60;
+    dt = 1/frameRate;
+    numPoints = 200;
+    filter = new ExpDecayFilter(0.5);
+    points = [];
+    points[0] = new GPoint(0, filter.getSample(1, dt));
+    for(i = 1; i < numPoints; i++)
+      points[i] = new GPoint(i*dt, filter.getSample(0, dt));
+    // get rid of using GPoint here - create arrays x,y and the use rsPlotPointsXY
 
 
-/*
-function plot()   // rename to plotExpDecImpResp
-{
-  p = new p5(plotExpDecImpResp, "ExpDecImpResp");
+    rsPlotPoints(p, points, width, height);
+    //rsPlotPoints(p, rsGetSinePoints(100), width, height);
+
+
+    p.noLoop();
+  };
+
+
 }
-*/
+
+
+
+
+// see here:
+// https://github.com/processing/p5.js/wiki/p5.js-overview#instantiation--namespace
+
+
+
+
+
+
 
 // see:
 // https://p5js.org/examples/instance-mode-instantiation.html
