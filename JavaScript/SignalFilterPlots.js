@@ -3,8 +3,8 @@ let plotExpDecImpResp = function(p) {
   p.setup = function() {
 
     // Settings:
-    var width  = 500;
-    var height = 300;
+    var width  = 800;
+    var height = 600;
     var margin = 0;
 
 		// Create the canvas
@@ -19,7 +19,8 @@ let plotExpDecImpResp = function(p) {
 		// Create a new plot and set its position on the screen
 		var plot = new GPlot(p);
     plot.setPos(margin, margin);                     // top-left corner
-    plot.setDim([width-2*margin, height-2*margin]);  // width, height
+    plot.setDim([width-100, height-100]); // why the fuck do we have to use -100 to make it work?!
+    //plot.setDim([width-2*margin, height-2*margin]);  // width, height
 
     // Set the plot title and the axis labels
 		plot.setPoints(points);
