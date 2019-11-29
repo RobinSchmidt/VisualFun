@@ -117,9 +117,9 @@ let rsExpDecayImpResp = function(p)
     // create data to plot:
     var frameRate = 60;
     var dt = 1/frameRate;
-    var numPoints = 200;
-    var randomness = 0.1*dt;
-    var filter = new ExpDecayFilter(0.5);
+    var numPoints = 50;
+    var randomness = 0.8*dt;
+    var filter = new ExpDecayFilter(0.2);
     var x = [];
     var y = [];
     var t = 0;
@@ -127,10 +127,9 @@ let rsExpDecayImpResp = function(p)
     y[0] = filter.getSample(1, dt);
     for(i = 1; i < numPoints; i++)
     {
-      t += dt;
-      //x[i] = i*dt;
-      x[i] = t;
-      y[i] = filter.getSample(0, dt);
+      dt_i = dt + randomness*Math.random();
+      x[i] = x[i-1] + dt_i;
+      y[i] = filter.getSample(0, dt_i);
     }
     // todo: add random variation to the time-instants: dt_i = dt + rand(...)
     // x[i] = x[i-1] + dt_i
