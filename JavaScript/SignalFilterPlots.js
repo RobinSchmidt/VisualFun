@@ -1,5 +1,6 @@
-function rsPlotPoints(points, width=600, height=300)
+function rsPlotPoints(p, points, width=600, height=300)
 {
+  var margin = 0;
   var dimCorrection = -100;
   // Hack: for some weird reason, the setDim function of GPlot makes the plots 100 pixels too 
   // wide and high, so we need this correction -> figure out, what's wrong with grafica here
@@ -7,6 +8,11 @@ function rsPlotPoints(points, width=600, height=300)
   // Create the canvas:
   var canvas = p.createCanvas(width, height);
   p.background(150); // maybe use black later
+
+  // Create a new plot and set its position on the screen
+  var plot = new GPlot(p);
+  plot.setPos(margin, margin);  // top-left corner
+  plot.setDim([width - margin + dimCorrection, height - margin + dimCorrection]); 
 
   // Set the plot title and the axis labels:
   plot.setPoints(points);
@@ -19,7 +25,7 @@ function rsPlotPoints(points, width=600, height=300)
   p.noLoop();
 }
 
-function rsPlotXY(x, y, width=600, height=300)
+function rsPlotXY(p, x, y, width=600, height=300)
 {
   // todo: check that x and y have the same size
   var points = [];
@@ -28,6 +34,7 @@ function rsPlotXY(x, y, width=600, height=300)
   rsPlotPoints(points, width, height);
 }
 
+// what sort of object is p? figure out choose an appropriate name
 
 
 
@@ -43,6 +50,7 @@ let examplePlot = function(p) {
 
   p.setup = function() {
 
+    /*
     // Settings:
     var width  = 600;
     var height = 300;
@@ -56,12 +64,16 @@ let examplePlot = function(p) {
     // Create the canvas
     var canvas = p.createCanvas(width, height);
     p.background(150);
+    */
 
     // Prepare the points for the plot
     var points = [];
     for (var i = 0; i < 100; i++)
       points[i] = new GPoint(i, Math.sin(i / 10));
 
+    rsPlotPoints(p, points);
+
+    /*
     // Create a new plot and set its position on the screen
     var plot = new GPlot(p);
     plot.setPos(margin, margin);  // top-left corner
@@ -76,6 +88,7 @@ let examplePlot = function(p) {
     // Draw it!
     plot.defaultDraw();
     p.noLoop();
+    */
   };
 
   /*
