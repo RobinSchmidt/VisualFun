@@ -6,7 +6,8 @@ function rsPlotPoints(p, points, width=600, height=300)
   // wide and high, so we need this correction -> figure out, what's wrong with grafica here
 
   // Create the canvas:
-  var canvas = p.createCanvas(width, height);
+  var canvas = p.createCanvas(width, height); // maybe this should be doen in setup
+    // ...actually all calls on the p-object should probably be done there
   p.background(150); // maybe use black later
 
   // Create a new plot and set its position on the screen
@@ -47,18 +48,22 @@ function rsPlotXY(p, x, y, width=600, height=300)
 // how can we make plotting functions that don't need a "p"?
 
 
-
+function rsGetSinePoints(numPoints)
+{
+  var points = [];
+  for (var i = 0; i < numPoints; i++)
+  {
+    var x = 2*Math.PI*i/(numPoints-1);
+    var y = Math.sin(x);
+    points[i] = new GPoint(x, y);
+  }
+  return points;
+}
 
 let rsPlotSine = function(p) {
 
   p.setup = function() {
-
-    // Prepare the points for the plot (factor out)
-    var points = [];
-    for (var i = 0; i < 100; i++)
-     points[i] = new GPoint(i/10, Math.sin(i / 10));
-
-    rsPlotPoints(p, points);
+    rsPlotPoints(p, rsGetSinePoints(100));
   };
 
   /*
@@ -70,6 +75,7 @@ let rsPlotSine = function(p) {
   */
   // i think, the p.draw function is only needed when we want to periodically redraw the image, 
   // i.e. create an animation - and it's probably mutually exclusive with calling noLoop?
+  // try making an animated plot - maybe draw an animated lissajous figure
 };
 // it seems, when calling createCanvas multiple times, the canvases are always placed next to 
 // each other and wrapping them into a table doesn't seem to have any effect - it seems, they are
