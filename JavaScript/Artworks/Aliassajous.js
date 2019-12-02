@@ -14,7 +14,7 @@ tEnd = 0; // a global variable for the endpoint of our curve
 /** Returns a sinusoidal function with unit period, i.e. the period is 1 rather than 2*PI as it
 would be for the regular sine function. 
 @param {number} x - Argument, typically in the range 0..1 */
-function rsSin(x)
+function rsSin1(x)
 {
   return Math.sin(2*PI*x); 
 }
@@ -26,10 +26,10 @@ the waveshaping is compensated for such that the final wave has unit amplitude a
 function rsSaturatedSine(x, d=0)
 {
   if(d == 0)
-    return rsSin(x);
+    return rsSin1(x);
   else
     //return Math.tanh(d * rsSin(x)) / Math.abs(Math.tanh(d));
-    return Math.tanh(d * rsSin(x)) / Math.abs(Math.tanh(d));
+    return Math.tanh(d * rsSin1(x)) / Math.abs(Math.tanh(d));
     // somehow this abs doesn't seem to work as expected - when moving drive through zero, there's
     // a discontinuous jump ...hmm...well...maybe that should be expected
 }
@@ -49,6 +49,7 @@ function rsCurveVertices(f, a, b, n)
 // actually, i think f could also return a 3D point
 // ..hmm - actually, it produces n+1 vertices, if f is perdiodic with period b-a, the last one will
 // be the same as the first and the curve will be closed
+// move to a library rsCurves.js that defines various curves in 2D and 3D
 
 //-------------------------------------------------------------------------------------------------
 // Library functions that depend on p5.js:
