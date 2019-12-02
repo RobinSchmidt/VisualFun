@@ -1,15 +1,9 @@
 //--------------------------------------------------------------------------------------------------
 
 /** Constructor of an exponential decay filter */
-// maybe use this syntax - it's nicer and closer to c++:
-// https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Classes
-// on the other hand, using this class-based syntax may obscure the fact that in JS there actually
-// are no classes - inheritance in JS is based on prototypes and it's probably a good idea to use
-// a syntax that reflects that - anything else may be misleading.
-
 ExpDecayFilter = function(timeConstant)
 {
-  this.tau   = timeConstant;
+  this.tau = timeConstant;
   this.state = 0;
 }
 
@@ -29,8 +23,6 @@ function(x, dt) // x: input value, dt: time-delta between this and previous samp
 // has no normalization - implement with normalization - see c++ implementation of rsNonUniformOnePole
 
 ExpDecayFilter.prototype.reset = function() { this.state = 0; };
-
-
 
 
 // todo make a file rsSignalOscillators/Sources
