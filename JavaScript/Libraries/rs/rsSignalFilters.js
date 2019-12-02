@@ -47,15 +47,18 @@ AttackDecayFilter.prototype.getSample = function(x, dt)
 {
   this.attFlt.timeConstant = this.attack;
   this.decFlt.timeConstant = this.decay;
-  return this.attFlt.getSample(this.decFlt.getSample(x, dt), dt);
+  return this.decFlt.getSample(x, dt) - this.attFlt.getSample(x, dt);
+  //return this.attFlt.getSample(this.decFlt.getSample(x, dt), dt);
 }
 // ToDo: 
 // -to compute the time-constants of both filters, use formulas that ensure that the peak is
 //  at unity
 // -currently, we use a series connection - maybe use a parallel connection instead.
-// -ok - this returns crap - probably because we don't use the normalization schemes in 
+// -the series connection returns crap - probably because we don't use the normalization schemes in 
 //  ExpDecayFilter - figure this out by plotting the step response - this typically exposes the 
 //  problems
+// -the parallel connection actually gives reasonable results - but maybe that changes when the 
+//  input is not just a single impulse but an impulse-train? -> test that!
 
 
 

@@ -127,8 +127,8 @@ let rsExpDecayImpResp = function(p)
     var numPoints = 50;
     var randomness = 0.8*dt;
 
-    var filter = new ExpDecayFilter(0.2);
-    //var filter = new AttackDecayFilter(0.05, 0.2);
+    //var filter = new ExpDecayFilter(0.2);
+    var filter = new AttackDecayFilter(0.1, 0.2);
 
 
     var x = [];

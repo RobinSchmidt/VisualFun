@@ -41,7 +41,8 @@ rsTimeDelta   = 0;
 // Test and experimentation functions:
 
 rsTimeCounter = 0;
-flt = new ExpDecayFilter(0.5); // time-constant tau is 2.0 seconds (time constant) 
+//flt = new ExpDecayFilter(0.5); // time-constant tau is 2.0 seconds (time constant) 
+flt = new AttackDecayFilter(0.1, 0.5);
 //  decay seems to be too slow - bug in the filter coefficient computation formula?
 
 // maybe put to top
@@ -65,6 +66,7 @@ function rsTestExpDecayFilter()
   if(rsTimeCounter >= period)
   {
     impulse = 1;
+    impulse = 2;
     rsTimeCounter -= period;
   }
 
@@ -123,6 +125,7 @@ function rsTestExpDecayFilter()
 // of the music - such as size, brightness, color, line-thickness, rotation, shear
 
 // provide a gui to turn the blinking on/off - it's annoying
+// maybe plot th e framerate at function of time
 
 
 
