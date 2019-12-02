@@ -61,6 +61,15 @@ function rsLines(p)
   for(var i = 0; i < p.length-1; i++)
     line(p[i][0], p[i][1], p[i+1][0], p[i+1][1]);
 }
+// make a function rsRays - instead of connecting the points with lines, draw rays from the origin
+// to the point
+
+function rsRays(p)
+{
+  for(var i = 0; i < p.length; i++)
+    line(0, 0, p[i][0], p[i][1]);
+}
+
 
 /** Draws a parametric curve (x,y) = f(t) in the interval t = a..b with n sample points 
 @param {function}  f - The function that takes the parameter t and returns a 2D point.
@@ -71,8 +80,11 @@ function rsCurveWithLines(f, a, b, n = 200)
 {
   rsLines(rsCurveVertices(f, a, b, n));
 }
-// factor out a function that returns the vertex-array - maybe rsCurveVertices
 
+function rsCurveWithRays(f, a, b, n = 200)
+{
+  rsRays(rsCurveVertices(f, a, b, n));
+}
 
 
 //=================================================================================================
@@ -123,6 +135,17 @@ function rsLissajous(n, m, numLines, a, b)
 }
 // actually, we can get rid of many of the parameters because we may get them from the global settings object
 
+function rsLissajous2(n, m, numLines, a, b)
+{
+  drive = settings.Drive;
+  s = 1;
+  p = 1/4;   // make parameter phaseDelta
+  rsCurveWithRays(t => [s*rsSaturatedSine( n*t,   drive), s*rsSaturatedSine( m*t+p, drive)], a, b, numLines);
+  rsCurveWithRays(t => [s*rsSaturatedSine( m*t+p, drive), s*rsSaturatedSine( n*t,   drive)], a, b, numLines);
+}
+// uses rays instead of lines - todo: make a general function that takes the rsCurveWithLines/Ray/etc. as
+// parameter  - maybe give the user a "DrawMode" combobox
+
 
 
 function rsAliassajous()
@@ -150,19 +173,28 @@ function rsAliassajous()
   //var end = 2*PI*(tEnd + settings.OffsetCoarse + settings.OffsetFine);
   var end = tEnd + settings.OffsetCoarse + settings.OffsetFine;
 
-  strokeWeight(12/scaleFactor)
+  // hmm - the rays are not so interesting - maybe they could be made more interesting, if their
+  // center point would also move around via a curve - maybe also an aliased one
+  strokeWeight(16/scaleFactor);
+  stroke(150, 50, 255, 50);
+  rsLissajous2(n, m, numLines, 0, end);
+
+
+  strokeWeight(12/scaleFactor);
   stroke(255, 75, 200, 30);
-  rsLissajous(n, m, numLines, 0, end)
+  rsLissajous(n, m, numLines, 0, end);
 
-  strokeWeight(6/scaleFactor)
+  strokeWeight(6/scaleFactor);
   stroke(200, 75, 255, 60);
-  rsLissajous(n, m, numLines, 0, end)
+  rsLissajous(n, m, numLines, 0, end);
 
-  strokeWeight(1/scaleFactor)
+  strokeWeight(1/scaleFactor);
   stroke(255, 255, 255, 120);
-  rsLissajous(n, m, numLines, 0, end)
+  rsLissajous(n, m, numLines, 0, end);
 
   // factor out the 3 calls into 1
+
+  // let the colors rotate - we need to set them up via HSL or HSV and let H rotate
 
 
   // this text is still at the wrong position, rotated 45° and shows too many digits
@@ -190,6 +222,12 @@ function rsAliassajous()
   // correct)....sooo - we need a numerical integration routine - implement trapezoidal 
   // integration - then we need to invert that function - fortunately, it's monotonic
   // try to plot the arc-length function
+  // maybe we could also try to re-parametrize it such that in equal time-steps, the rays trace
+  // out equal angles? or equal areas...kinda like Kepler's law? ...but the angle is nonmonotonic,
+  // so the angle-function is not invertible - but maybe with some trickery (exploting additional
+  // information about the previous output value, maybe), we can find the inverse function anyway?
+  // ...if there are many possible values, choose the one that is closest to the previous output?
+  // or maybe somehow use the curvature to warp the time-parameter?
 
   // update counter with wrap around:
   tEnd = tEnd + dt;

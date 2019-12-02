@@ -1,0 +1,55 @@
+make a couple of small(ish) js libraries with clearly defined and limited scope:
+
+rsCore: basic infractructure stuff like deep-copies, data-handling
+
+rsDom: DOM traversal and manipulation convenience functions - but maybe use jquery
+
+rsUserInterface: convenience functions for user interfaces
+
+rsGeometry: stuff for geometric transformations for graphics:
+  -classes: rsVector2D, rsMatrix2D, rsVector3D, rsMatrix3D, rsConicSection, rsProjection, 
+   rsBezierCurve, rsPolygon, rsMoebiusTransform
+
+rsLinearAlgebra: linear algebra in arbitrary dimensions - solving linear systems for dense and
+  tridiagonal matrices, maybe pentadiagonals too
+  
+rsInterpolation: various methods fo interpolating datasets including natrual and hermite splines, 
+  bilinear, bicubic, ...
+  
+rsNumericCalculus: numerical differentiaiton and integration routines (trapezoidal, simpson, etc.)
+
+rsDifferentialEquations: ODE and PDE solvers
+
+rsSignalFilters: DSP filters
+
+rsSignalTransforms: FFT, DCT, Wavelets, etc.
+
+
+
+maybe there should be a global object rs and various parts of the library add member functions
+to it when they are imported, so when we import rsLinearAlgebra, we could call:
+
+x = rs.solveLinearSystem(A, b);
+
+d3 does it also like that - functions are called like d3.doStuff - doesn't pollute the global
+namespace
+
+if possible, make the dependencies clear by importing - for example - rsLinearAlgebra from 
+rsInterpolation
+
+// how to create modules, see:
+// https://www.jvandemo.com/a-10-minute-primer-to-javascript-modules-module-formats-module-loaders-and-module-bundlers/
+// https://developer.mozilla.org/en-US/docs/Web/JavaScript/Guide/Modules
+// https://www.freecodecamp.org/news/javascript-modules-a-beginner-s-guide-783f7d7a5fcc/
+// https://www.sitepoint.com/understanding-module-exports-exports-node-js/
+// https://juristr.com/blog/2017/03/angular-modules-vs-es6-modules/
+
+---------------------------------------------------------------------------------------------------
+WebPlotter
+-provide 2D and 3D function and data plotting facilities, maybe even facilities to plot solutions
+ of differential equations by numericall solving them (vector-fields, field lines)
+
+ 
+ for inspiration, see:
+ http://weitz.de/plot/
+ https://gitgud.io/unconed/mathbox -> really impressive!

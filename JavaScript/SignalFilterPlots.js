@@ -8,6 +8,11 @@ function rsAssert(condition, message) {
 //-------------------------------------------------------------------------------------------------
 // move into a library rsPlotting.js or rsPlotViaGrafica:
 
+// maybe rename to rsPlotPointsGrafica - we may later also implement other plotting functions maybe
+// based on three.js, etc. and we may need to distiguish them somehow...maybe we should wrap
+// that stuff int an object/class rsPlotterGrafica - that seems to be the cleanest solution 
+// because that object could also contain all the setup work that we need to make the plots look 
+// nice
 function rsPlotPoints(p, points, width=600, height=300)
 {
   var margin = 0; 
@@ -139,7 +144,10 @@ let rsExpDecayImpResp = function(p)
   };
 }
 
-
+// try to plot this:
+// https://www.youtube.com/watch?v=15y50SwgQlQ&t=6m30s
+// or even better: try to animate it - let the point move around the ellipse in one plot and
+// plot the curvature in the second plots - give the user sliders to set up x- and y-radius
 
 
 // see here:
