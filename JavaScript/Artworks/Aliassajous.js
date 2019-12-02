@@ -33,6 +33,8 @@ function rsSaturatedSine(x, d=0)
     // somehow this abs doesn't seem to work as expected - when moving drive through zero, there's
     // a discontinuous jump ...hmm...well...maybe that should be expected
 }
+// in addition to waveshaping of the output sinusoid, also try phase-shaping of the sinusoid's 
+// argument - maybe try symmetric as well as asymmetric shaping functions
 
 /** Creates the array of vertices for a parametric curve (x,y) = f(t) in the interval t = a..b with
 n sample points/vertices.
@@ -175,7 +177,7 @@ function rsAliassajous()
 
   // hmm - the rays are not so interesting - maybe they could be made more interesting, if their
   // center point would also move around via a curve - maybe also an aliased one
-  strokeWeight(16/scaleFactor);
+  strokeWeight(8/scaleFactor);
   stroke(150, 50, 255, 50);
   rsLissajous2(n, m, numLines, 0, end);
 
