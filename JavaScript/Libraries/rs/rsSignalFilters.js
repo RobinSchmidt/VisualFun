@@ -47,12 +47,15 @@ AttackDecayFilter.prototype.getSample = function(x, dt)
 {
   this.attFlt.timeConstant = this.attack;
   this.decFlt.timeConstant = this.decay;
-  return attFlt.getSample(decFlt.getSample(x, dt), dt);
+  return this.attFlt.getSample(this.decFlt.getSample(x, dt), dt);
 }
 // ToDo: 
 // -to compute the time-constants of both filters, use formulas that ensure that the peak is
 //  at unity
 // -currently, we use a series connection - maybe use a parallel connection instead.
+// -ok - this returns crap - probably because we don't use the normalization schemes in 
+//  ExpDecayFilter - figure this out by plotting the step response - this typically exposes the 
+//  problems
 
 
 

@@ -1,4 +1,4 @@
-// move to library rsCore.js
+// move to library rsCore.js - done - remove from here
 function rsAssert(condition, message) {
     if (!condition) {
         throw message || "Assertion failed";
@@ -126,7 +126,11 @@ let rsExpDecayImpResp = function(p)
     var dt = 1/frameRate;
     var numPoints = 50;
     var randomness = 0.8*dt;
+
     var filter = new ExpDecayFilter(0.2);
+    //var filter = new AttackDecayFilter(0.05, 0.2);
+
+
     var x = [];
     var y = [];
     var t = 0;
