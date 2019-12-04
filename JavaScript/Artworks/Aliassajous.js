@@ -9,7 +9,7 @@ tEnd = 0; // a global variable for the endpoint of our curve
 // code that may be factored out into a library at some point 
 
 //-------------------------------------------------------------------------------------------------
-// Library functions that have no external dependencies:
+// Library functions that have no external dependencies - maybe move thes into rsCurves.js:
 
 /** Returns a sinusoidal function with unit period, i.e. the period is 1 rather than 2*PI as it
 would be for the regular sine function. 
@@ -36,23 +36,8 @@ function rsSaturatedSine(x, d=0)
 // in addition to waveshaping of the output sinusoid, also try phase-shaping of the sinusoid's 
 // argument - maybe try symmetric as well as asymmetric shaping functions
 
-/** Creates the array of vertices for a parametric curve (x,y) = f(t) in the interval t = a..b with
-n sample points/vertices.
-@param {function}  f - The function that takes the parameter t and returns a 2D point.
-@param {number}    a - Start of the interval for t.
-@param {number}    b - End of the interval for t.
-@param {number}    n - Number of sample points.     */
-function rsCurveVertices(f, a, b, n)
-{
-  return [...Array(n+1).keys()].map(k => f(a + (b-a) * k/n));
-}
-// actually, i think f could also return a 3D point
-// ..hmm - actually, it produces n+1 vertices, if f is perdiodic with period b-a, the last one will
-// be the same as the first and the curve will be closed
-// move to a library rsCurves.js that defines various curves in 2D and 3D
 
-//-------------------------------------------------------------------------------------------------
-// Library functions that depend on p5.js:
+
 
 
 
