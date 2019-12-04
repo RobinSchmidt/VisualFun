@@ -5,46 +5,7 @@ tEnd = 0; // a global variable for the endpoint of our curve
 // can be tweaked to "fast-forward" at 50, something interesting happens
 // rename to numCycles or curveLength
 
-//=================================================================================================
-// code that may be factored out into a library at some point 
 
-//-------------------------------------------------------------------------------------------------
-// Library functions that have no external dependencies - maybe move thes into rsCurves.js:
-
-/** Returns a sinusoidal function with unit period, i.e. the period is 1 rather than 2*PI as it
-would be for the regular sine function. 
-@param {number} x - Argument, typically in the range 0..1 */
-function rsSin1(x)
-{
-  return Math.sin(2*PI*x); 
-}
-
-/** Computes a unit-period sine wave that goes through a tanh waveshaper. The amplitude loss due to
-the waveshaping is compensated for such that the final wave has unit amplitude again.  
-@param {number} x - Argument, typically in the range 0..1
-@param {number} [d=0] - Drive - the higher, the more squarewave-like the output becomes. */
-function rsSaturatedSine(x, d=0)
-{
-  if(d == 0)
-    return rsSin1(x);
-  else
-    //return Math.tanh(d * rsSin(x)) / Math.abs(Math.tanh(d));
-    return Math.tanh(d * rsSin1(x)) / Math.abs(Math.tanh(d));
-    // somehow this abs doesn't seem to work as expected - when moving drive through zero, there's
-    // a discontinuous jump ...hmm...well...maybe that should be expected
-}
-// in addition to waveshaping of the output sinusoid, also try phase-shaping of the sinusoid's 
-// argument - maybe try symmetric as well as asymmetric shaping functions
-
-
-
-
-
-
-
-//=================================================================================================
-// Code specifically for this page (try to minimize this code, i.e. try to factor out stuff into
-// "library" code)
 
 // User parameters - some of them can be controlled by the GUI:
 settings = 
@@ -195,6 +156,7 @@ function rsAliassajous()
 function setup() 
 {
   createCanvas(windowWidth, windowHeight);
+  //createCanvas(windowWidth, windowHeight, WEBGL); // doesn't work on old PC -> try on new
   rsCreateAliassajousGui();
 }
 
